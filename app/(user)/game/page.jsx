@@ -1,4 +1,3 @@
-
 // // .......................................................
 
 // 'use client';
@@ -9,14 +8,14 @@
 //   const router = useRouter();
 //   const [periodNumber, setPeriodNumber] = useState('Loading...');
 //   const [timeLeft, setTimeLeft] = useState(30);
-//   const [choice, setChoice] = useState(null); 
+//   const [choice, setChoice] = useState(null);
 //   const [amount, setAmount] = useState('');
-//   const [isLocked, setIsLocked] = useState(false); 
-//   const [globalResults, setGlobalResults] = useState([]); 
+//   const [isLocked, setIsLocked] = useState(false);
+//   const [globalResults, setGlobalResults] = useState([]);
 //   const [toastMessage, setToastMessage] = useState(null);
-//   const [userPhone, setUserPhone] = useState(''); 
+//   const [userPhone, setUserPhone] = useState('');
 //   const [userBalance, setUserBalance] = useState('0.00');
-//   const [isAuthorized, setIsAuthorized] = useState(false); 
+//   const [isAuthorized, setIsAuthorized] = useState(false);
 
 //   const activeBetPeriodRef = useRef(null);
 
@@ -34,7 +33,7 @@
 //     if (!identifier) {
 //       showToast('লগইন করা নেই বা ইউজার পাওয়া যায়নি।', 'loss');
 //       setTimeout(() => {
-//         window.location.replace('/login'); 
+//         window.location.replace('/login');
 //       }, 1500);
 //       return;
 //     }
@@ -53,11 +52,11 @@
 //         credentials: 'include'
 //       });
 //       const data = await res.json();
-      
+
 //       if (data.success) {
 //         if (data.userBetResult) {
 //           if (
-//             activeBetPeriodRef.current && 
+//             activeBetPeriodRef.current &&
 //             data.userBetResult.periodNumber === activeBetPeriodRef.current
 //           ) {
 //             if (data.userBetResult.result === 'win' || data.userBetResult.result === 'WIN') {
@@ -104,7 +103,7 @@
 //   };
 
 //   useEffect(() => {
-//     if (!isAuthorized) return; 
+//     if (!isAuthorized) return;
 
 //     fetchGameStatus();
 //     const timerInterval = setInterval(() => {
@@ -148,17 +147,17 @@
 //       const res = await fetch('/api/game/bet', {
 //         method: 'POST',
 //         headers: { 'Content-Type': 'application/json' },
-//         credentials: 'include', 
+//         credentials: 'include',
 //         body: JSON.stringify({ choice, amount: sanitizedAmount, periodNumber })
 //       });
 //       const data = await res.json();
-      
+
 //       if (data.success) {
-//         setIsLocked(true); 
+//         setIsLocked(true);
 //         activeBetPeriodRef.current = periodNumber;
 //         // ✅ বেট সফল হলে 'success' টাইপ পাঠানো হলো
 //         showToast(data.message, 'success');
-        
+
 //         // ✅ FIX: Balance sync — Number conversion
 //         if (data.newBalance !== undefined) {
 //           const cleanBalance = Number(data.newBalance) || 0;
@@ -195,29 +194,29 @@
 
 //   return (
 //     <div className="min-h-screen bg-[#07090e] text-slate-100 flex justify-center p-3 md:p-6 pb-24 md:pb-8 font-sans selection:bg-emerald-500 selection:text-white relative">
-      
+
 //       {/* রেসপনসিভ জোরপূর্বক নোটিফিকেশন মডাল */}
 //       {toastMessage && (
 //         <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-fadeIn">
 //           <div className={`p-4 md:p-5 rounded-2xl shadow-2xl text-center max-w-[280px] md:max-w-xs w-full border-2 flex flex-col items-center gap-2.5 md:gap-3 transition-all ${
 //             toastMessage.type === 'win' || toastMessage.type === 'success'
-//               ? 'bg-slate-900 border-emerald-500 text-emerald-400 shadow-emerald-950/80' 
+//               ? 'bg-slate-900 border-emerald-500 text-emerald-400 shadow-emerald-950/80'
 //               : 'bg-slate-900 border-rose-500 text-rose-400 shadow-rose-950/80'
 //           }`}>
 //             <i className={`fa-solid ${
-//               toastMessage.type === 'win' || toastMessage.type === 'success' 
-//                 ? 'fa-circle-check text-3xl md:text-4xl text-emerald-400' 
+//               toastMessage.type === 'win' || toastMessage.type === 'success'
+//                 ? 'fa-circle-check text-3xl md:text-4xl text-emerald-400'
 //                 : 'fa-circle-exclamation text-3xl md:text-4xl text-rose-500'
 //             } ${toastMessage.type === 'win' ? 'animate-bounce' : ''}`}></i>
-            
+
 //             <h3 className="text-sm md:text-base font-black tracking-wide text-white">
-//               {toastMessage.type === 'win' 
-//                 ? 'বিজয়ী ঘোষণা!' 
-//                 : toastMessage.type === 'success' 
-//                 ? 'সফল বার্তা' 
+//               {toastMessage.type === 'win'
+//                 ? 'বিজয়ী ঘোষণা!'
+//                 : toastMessage.type === 'success'
+//                 ? 'সফল বার্তা'
 //                 : 'ফলাফল নোটিশ'}
 //             </h3>
-            
+
 //             <p className="text-xs md:text-sm font-bold text-slate-200 leading-relaxed">
 //               {toastMessage.text}
 //             </p>
@@ -225,7 +224,7 @@
 //               onClick={() => setToastMessage(null)}
 //               className={`w-full py-2.5 rounded-xl font-bold text-[11px] md:text-xs text-white transition cursor-pointer active:scale-95 shadow-md ${
 //                 toastMessage.type === 'win' || toastMessage.type === 'success'
-//                   ? 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-emerald-900/40' 
+//                   ? 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-emerald-900/40'
 //                   : 'bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 shadow-rose-900/40'
 //               }`}
 //             >
@@ -236,7 +235,7 @@
 //       )}
 
 //       <div className="w-full max-w-md md:max-w-5xl space-y-3 md:space-y-4">
-        
+
 //         <div className="bg-slate-900 p-3 md:p-4 rounded-xl md:rounded-2xl border border-slate-800 shadow-lg flex justify-between items-center gap-3">
 //           <div className="flex items-center gap-2.5 md:gap-3 min-w-0 flex-1">
 //             <button
@@ -262,9 +261,9 @@
 //         </div>
 
 //         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-          
+
 //           <div className="space-y-3 md:space-y-4">
-            
+
 //             <div className="grid grid-cols-2 gap-2 md:gap-3">
 //               <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-3 md:p-4 rounded-xl md:rounded-2xl border border-slate-800 shadow-lg text-center">
 //                 <p className="text-[10px] md:text-xs text-slate-400 uppercase font-semibold">পিরিয়ড</p>
@@ -280,15 +279,15 @@
 
 //             <div className="bg-slate-900 p-4 md:p-5 rounded-xl md:rounded-2xl border border-slate-800 shadow-lg">
 //               <form onSubmit={handlePlaceBet} className="space-y-3 md:space-y-4">
-                
+
 //                 <div className="grid grid-cols-2 gap-2 md:gap-3">
 //                   <button
 //                     type="button"
 //                     disabled={isLocked}
 //                     onClick={() => setChoice('Big')}
 //                     className={`py-3 md:py-4 rounded-xl font-bold text-sm md:text-base transition cursor-pointer ${
-//                       choice === 'Big' 
-//                         ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white ring-2 ring-emerald-400/50 shadow-lg shadow-emerald-900/40' 
+//                       choice === 'Big'
+//                         ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white ring-2 ring-emerald-400/50 shadow-lg shadow-emerald-900/40'
 //                         : 'bg-slate-950 text-slate-300 hover:bg-slate-800 border border-slate-800'
 //                     } ${isLocked ? 'opacity-50 cursor-not-allowed' : ''}`}
 //                   >
@@ -299,8 +298,8 @@
 //                     disabled={isLocked}
 //                     onClick={() => setChoice('Small')}
 //                     className={`py-3 md:py-4 rounded-xl font-bold text-sm md:text-base transition cursor-pointer ${
-//                       choice === 'Small' 
-//                         ? 'bg-gradient-to-r from-rose-600 to-red-600 text-white ring-2 ring-rose-400/50 shadow-lg shadow-rose-900/40' 
+//                       choice === 'Small'
+//                         ? 'bg-gradient-to-r from-rose-600 to-red-600 text-white ring-2 ring-rose-400/50 shadow-lg shadow-rose-900/40'
 //                         : 'bg-slate-950 text-slate-300 hover:bg-slate-800 border border-slate-800'
 //                     } ${isLocked ? 'opacity-50 cursor-not-allowed' : ''}`}
 //                   >
@@ -324,7 +323,7 @@
 //                     className={`w-full bg-slate-950 border border-slate-800 p-3 md:p-3.5 rounded-xl text-xs md:text-sm text-white outline-none focus:border-emerald-500 font-mono ${isLocked ? 'opacity-50 cursor-not-allowed' : ''}`}
 //                     required
 //                   />
-                  
+
 //                   <div className="grid grid-cols-4 gap-1.5 md:gap-2 pt-1">
 //                     {[10, 50, 100, 500].map((val) => (
 //                       <button
@@ -344,8 +343,8 @@
 //                   type="submit"
 //                   disabled={timeLeft <= 5 || isLocked}
 //                   className={`w-full py-3.5 md:py-4 rounded-xl font-extrabold text-xs md:text-sm transition shadow-md cursor-pointer flex justify-center items-center gap-2 active:scale-95 ${
-//                     timeLeft <= 5 || isLocked 
-//                       ? 'bg-slate-800 text-slate-500 cursor-not-allowed' 
+//                     timeLeft <= 5 || isLocked
+//                       ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
 //                       : 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-emerald-900/30'
 //                   }`}
 //                 >
@@ -376,7 +375,7 @@
 //               </h4>
 //               <span className="text-[10px] md:text-xs text-slate-500 font-mono">{globalResults.length} টি</span>
 //             </div>
-            
+
 //             <div className="bg-slate-950 rounded-xl border border-slate-800/80 overflow-hidden">
 //               <div className="max-h-[300px] md:max-h-[500px] overflow-y-auto custom-scrollbar">
 //                 <table className="w-full text-left border-collapse">
@@ -400,8 +399,8 @@
 //                           <td className="py-2.5 md:py-3 px-3 md:px-4 font-mono text-slate-300 text-[11px] md:text-xs">{item.periodNumber}</td>
 //                           <td className="py-2.5 md:py-3 px-3 md:px-4 text-right">
 //                             <span className={`inline-block px-2.5 md:px-3 py-0.5 md:py-1 rounded-lg text-[10px] md:text-xs font-bold ${
-//                               item.result === 'Big' || item.result === 'BIG' 
-//                                 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' 
+//                               item.result === 'Big' || item.result === 'BIG'
+//                                 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
 //                                 : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
 //                             }`}>
 //                               {item.result === 'Big' || item.result === 'BIG' ? '🟢 ' : '🔴 '}
@@ -427,22 +426,22 @@
 
 // .......................................................
 
-'use client';
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+"use client";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useRouter } from "next/navigation";
 
 export default function GamePage() {
   const router = useRouter();
-  const [periodNumber, setPeriodNumber] = useState('Loading...');
+  const [periodNumber, setPeriodNumber] = useState("Loading...");
   const [timeLeft, setTimeLeft] = useState(30);
-  const [choice, setChoice] = useState(null); 
-  const [amount, setAmount] = useState('');
-  const [isLocked, setIsLocked] = useState(false); 
-  const [globalResults, setGlobalResults] = useState([]); 
+  const [choice, setChoice] = useState(null);
+  const [amount, setAmount] = useState("");
+  const [isLocked, setIsLocked] = useState(false);
+  const [globalResults, setGlobalResults] = useState([]);
   const [toastMessage, setToastMessage] = useState(null);
-  const [userPhone, setUserPhone] = useState(''); 
-  const [userBalance, setUserBalance] = useState('0.00');
-  const [isAuthorized, setIsAuthorized] = useState(false); 
+  const [userPhone, setUserPhone] = useState("");
+  const [userBalance, setUserBalance] = useState("0.00");
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
   const activeBetPeriodRef = useRef(null);
   // ✅ FIX: toast timer track করার জন্য ref (race condition এড়াতে)
@@ -451,7 +450,7 @@ export default function GamePage() {
   const fetchGameStatusRef = useRef(null);
 
   // ✅ FIX: showToast কে useCallback দিয়ে memoize + timer clear
-  const showToast = useCallback((text, type = 'info') => {
+  const showToast = useCallback((text, type = "info") => {
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     setToastMessage({ text, type });
     toastTimerRef.current = setTimeout(() => {
@@ -463,38 +462,45 @@ export default function GamePage() {
   // ✅ FIX: useEffect-এ ব্যবহারের জন্য useCallback দিয়ে memoize
   const fetchGameStatus = useCallback(async () => {
     try {
-      const res = await fetch('/api/game/period', {
-        credentials: 'include'
+      const res = await fetch("/api/game/period", {
+        credentials: "include",
       });
       const data = await res.json();
-      
+
       if (data.success) {
         // ✅ FIX: localStorage-এ last notified period রাখছি যাতে reload-এও toast কাজ করে
         if (data.userBetResult) {
-          const lastNotified = localStorage.getItem('lastNotifiedPeriod');
+          const lastNotified = localStorage.getItem("lastNotifiedPeriod");
           const currentResultPeriod = String(data.userBetResult.periodNumber);
-          
+
           if (
-            activeBetPeriodRef.current && 
-            String(data.userBetResult.periodNumber) === String(activeBetPeriodRef.current) &&
+            activeBetPeriodRef.current &&
+            String(data.userBetResult.periodNumber) ===
+              String(activeBetPeriodRef.current) &&
             lastNotified !== currentResultPeriod
           ) {
-            if (data.userBetResult.result === 'win' || data.userBetResult.result === 'WIN') {
-              showToast(`অভিনন্দন! আপনি জিতে গেছেন! 🎉`, 'win');
-            } else if (data.userBetResult.result === 'loss' || data.userBetResult.result === 'LOSS') {
-              showToast(`দুঃখিত! আপনি হেরে গেছেন। ❌`, 'loss');
+            if (
+              data.userBetResult.result === "win" ||
+              data.userBetResult.result === "WIN"
+            ) {
+              showToast(`অভিনন্দন! আপনি জিতে গেছেন! 🎉`, "win");
+            } else if (
+              data.userBetResult.result === "loss" ||
+              data.userBetResult.result === "LOSS"
+            ) {
+              showToast(`দুঃখিত! আপনি হেরে গেছেন। ❌`, "loss");
             }
-            localStorage.setItem('lastNotifiedPeriod', currentResultPeriod);
+            localStorage.setItem("lastNotifiedPeriod", currentResultPeriod);
             activeBetPeriodRef.current = null;
           }
         }
 
         // ✅ FIX: setPeriodNumber-এ functional update ব্যবহার করে stale state এড়ানো
         setPeriodNumber((prevPeriod) => {
-          if (prevPeriod !== 'Loading...' && prevPeriod !== data.periodNumber) {
+          if (prevPeriod !== "Loading..." && prevPeriod !== data.periodNumber) {
             setIsLocked(false);
             setChoice(null);
-            setAmount('');
+            setAmount("");
             activeBetPeriodRef.current = null;
           }
           return data.periodNumber;
@@ -513,19 +519,21 @@ export default function GamePage() {
           const cleanBalance = Number(data.balance) || 0;
           setUserBalance((prev) => {
             if (Number(prev) !== cleanBalance) {
-              const savedUser = JSON.parse(localStorage.getItem('user') || '{}');
+              const savedUser = JSON.parse(
+                localStorage.getItem("user") || "{}",
+              );
               savedUser.balance = cleanBalance;
               if (data.turnover !== undefined) {
                 savedUser.turnover = Number(data.turnover) || 0;
               }
-              localStorage.setItem('user', JSON.stringify(savedUser));
+              localStorage.setItem("user", JSON.stringify(savedUser));
             }
             return cleanBalance;
           });
         }
       }
     } catch (err) {
-      console.error('Sync error:', err);
+      console.error("Sync error:", err);
     }
   }, [showToast]);
 
@@ -535,13 +543,13 @@ export default function GamePage() {
   }, [fetchGameStatus]);
 
   useEffect(() => {
-    const savedUser = JSON.parse(localStorage.getItem('user') || '{}');
+    const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
     const identifier = savedUser.uid || savedUser.phone;
 
     if (!identifier) {
-      showToast('লগইন করা নেই বা ইউজার পাওয়া যায়নি।', 'loss');
+      showToast("লগইন করা নেই বা ইউজার পাওয়া যায়নি।", "loss");
       setTimeout(() => {
-        window.location.replace('/login'); 
+        window.location.replace("/login");
       }, 1500);
       return;
     }
@@ -556,7 +564,7 @@ export default function GamePage() {
 
   // ✅ FIX: interval একবারই সেট হবে; periodNumber ডিপেন্ডেন্সি থেকে বাদ
   useEffect(() => {
-    if (!isAuthorized) return; 
+    if (!isAuthorized) return;
 
     fetchGameStatusRef.current?.();
     const timerInterval = setInterval(() => {
@@ -584,66 +592,69 @@ export default function GamePage() {
 
     const sanitizedAmount = Number(amount);
     if (isNaN(sanitizedAmount) || sanitizedAmount <= 0) {
-      showToast('অনুগ্রহ করে সঠিক পজিটিভ অ্যামাউন্ট ইনপুট দিন!', 'loss');
+      showToast("অনুগ্রহ করে সঠিক পজিটিভ অ্যামাউন্ট ইনপুট দিন!", "loss");
       return;
     }
 
     if (!choice) {
-      showToast('দয়া করে প্রথমে Big অথবা Small সিলেক্ট করুন!', 'loss');
+      showToast("দয়া করে প্রথমে Big অথবা Small সিলেক্ট করুন!", "loss");
       return;
     }
 
     if (timeLeft <= 5) {
-      showToast('বেড নেওয়ার সময় শেষ! শেষ ৫ সেকেন্ডে বেড প্লেস করা যাবে না।', 'loss');
+      showToast(
+        "বেড নেওয়ার সময় শেষ! শেষ ৫ সেকেন্ডে বেড প্লেস করা যাবে না।",
+        "loss",
+      );
       return;
     }
 
     if (isLocked) {
-      showToast('এই রাউন্ডে ইতিমধ্যে আপনার বেট গ্রহণ করা হয়েছে!', 'loss');
+      showToast("এই রাউন্ডে ইতিমধ্যে আপনার বেট গ্রহণ করা হয়েছে!", "loss");
       return;
     }
 
     // ✅ FIX: client-side balance check (UX improvement; server এখনও main guard)
     if (sanitizedAmount > Number(userBalance)) {
-      showToast('পর্যাপ্ত ব্যালেন্স নেই!', 'loss');
+      showToast("পর্যাপ্ত ব্যালেন্স নেই!", "loss");
       return;
     }
 
     try {
-      const res = await fetch('/api/game/bet', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include', 
-        body: JSON.stringify({ choice, amount: sanitizedAmount, periodNumber })
+      const res = await fetch("/api/game/bet", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ choice, amount: sanitizedAmount, periodNumber }),
       });
       const data = await res.json();
-      
+
       if (data.success) {
-        setIsLocked(true); 
+        setIsLocked(true);
         activeBetPeriodRef.current = periodNumber;
         // ✅ বেট সফল হলে 'success' টাইপ পাঠানো হলো
-        showToast(data.message, 'success');
-        
+        showToast(data.message, "success");
+
         // ✅ FIX: Balance sync — Number conversion + only-on-change write
         if (data.newBalance !== undefined) {
           const cleanBalance = Number(data.newBalance) || 0;
           setUserBalance(cleanBalance);
-          const savedUser = JSON.parse(localStorage.getItem('user') || '{}');
+          const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
           savedUser.balance = cleanBalance;
           if (data.newTurnover !== undefined) {
             savedUser.turnover = Number(data.newTurnover) || 0;
           }
-          localStorage.setItem('user', JSON.stringify(savedUser));
+          localStorage.setItem("user", JSON.stringify(savedUser));
         }
       } else {
-        showToast(data.message, 'loss');
-        if (data.message && data.message.includes('ইতিমধ্যে বেট করা হয়েছে')) {
+        showToast(data.message, "loss");
+        if (data.message && data.message.includes("ইতিমধ্যে বেট করা হয়েছে")) {
           setIsLocked(true);
         }
       }
     } catch (err) {
-      console.error('Bet error:', err);
-      showToast('সার্ভার এরর হয়েছে!', 'loss');
+      console.error("Bet error:", err);
+      showToast("সার্ভার এরর হয়েছে!", "loss");
     }
   };
 
@@ -652,7 +663,9 @@ export default function GamePage() {
       <div className="min-h-screen bg-[#07090e] text-white flex items-center justify-center">
         <div className="text-center space-y-3">
           <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="text-xs font-semibold text-slate-400">যাচাই করা হচ্ছে...</p>
+          <p className="text-xs font-semibold text-slate-400">
+            যাচাই করা হচ্ছে...
+          </p>
         </div>
       </div>
     );
@@ -660,38 +673,41 @@ export default function GamePage() {
 
   return (
     <div className="min-h-screen bg-[#07090e] text-slate-100 flex justify-center p-3 md:p-6 pb-24 md:pb-8 font-sans selection:bg-emerald-500 selection:text-white relative">
-      
       {/* রেসপনসিভ জোরপূর্বক নোটিফিকেশন মডাল */}
       {toastMessage && (
         <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-fadeIn">
-          <div className={`p-4 md:p-5 rounded-2xl shadow-2xl text-center max-w-[280px] md:max-w-xs w-full border-2 flex flex-col items-center gap-2.5 md:gap-3 transition-all ${
-            toastMessage.type === 'win' || toastMessage.type === 'success'
-              ? 'bg-slate-900 border-emerald-500 text-emerald-400 shadow-emerald-950/80' 
-              : 'bg-slate-900 border-rose-500 text-rose-400 shadow-rose-950/80'
-          }`}>
-            <i className={`fa-solid ${
-              toastMessage.type === 'win' || toastMessage.type === 'success' 
-                ? 'fa-circle-check text-3xl md:text-4xl text-emerald-400' 
-                : 'fa-circle-exclamation text-3xl md:text-4xl text-rose-500'
-            } ${toastMessage.type === 'win' ? 'animate-bounce' : ''}`}></i>
-            
+          <div
+            className={`p-4 md:p-5 rounded-2xl shadow-2xl text-center max-w-[280px] md:max-w-xs w-full border-2 flex flex-col items-center gap-2.5 md:gap-3 transition-all ${
+              toastMessage.type === "win" || toastMessage.type === "success"
+                ? "bg-slate-900 border-emerald-500 text-emerald-400 shadow-emerald-950/80"
+                : "bg-slate-900 border-rose-500 text-rose-400 shadow-rose-950/80"
+            }`}
+          >
+            <i
+              className={`fa-solid ${
+                toastMessage.type === "win" || toastMessage.type === "success"
+                  ? "fa-circle-check text-3xl md:text-4xl text-emerald-400"
+                  : "fa-circle-exclamation text-3xl md:text-4xl text-rose-500"
+              } ${toastMessage.type === "win" ? "animate-bounce" : ""}`}
+            ></i>
+
             <h3 className="text-sm md:text-base font-black tracking-wide text-white">
-              {toastMessage.type === 'win' 
-                ? 'বিজয়ী ঘোষণা!' 
-                : toastMessage.type === 'success' 
-                ? 'সফল বার্তা' 
-                : 'ফলাফল নোটিশ'}
+              {toastMessage.type === "win"
+                ? "বিজয়ী ঘোষণা!"
+                : toastMessage.type === "success"
+                  ? "সফল বার্তা"
+                  : "ফলাফল নোটিশ"}
             </h3>
-            
+
             <p className="text-xs md:text-sm font-bold text-slate-200 leading-relaxed">
               {toastMessage.text}
             </p>
             <button
               onClick={() => setToastMessage(null)}
               className={`w-full py-2.5 rounded-xl font-bold text-[11px] md:text-xs text-white transition cursor-pointer active:scale-95 shadow-md ${
-                toastMessage.type === 'win' || toastMessage.type === 'success'
-                  ? 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-emerald-900/40' 
-                  : 'bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 shadow-rose-900/40'
+                toastMessage.type === "win" || toastMessage.type === "success"
+                  ? "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-emerald-900/40"
+                  : "bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 shadow-rose-900/40"
               }`}
             >
               ঠিক আছে (OK)
@@ -701,16 +717,18 @@ export default function GamePage() {
       )}
 
       <div className="w-full max-w-md md:max-w-5xl space-y-3 md:space-y-4">
-        
         <div className="bg-slate-900 p-3 md:p-4 rounded-xl md:rounded-2xl border border-slate-800 shadow-lg flex justify-between items-center gap-3">
           <div className="flex items-center gap-2.5 md:gap-3 min-w-0 flex-1">
             <button
               onClick={() => {
                 // ✅ FIX: history না থাকলে fallback হিসেবে home-এ পাঠাবে
-                if (typeof window !== 'undefined' && window.history.length > 1) {
+                if (
+                  typeof window !== "undefined" &&
+                  window.history.length > 1
+                ) {
                   router.back();
                 } else {
-                  router.push('/');
+                  router.push("/");
                 }
               }}
               className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-300 transition cursor-pointer flex-shrink-0"
@@ -721,68 +739,87 @@ export default function GamePage() {
               <i className="fa-solid fa-gamepad text-sm md:text-base"></i>
             </div>
             <div className="min-w-0">
-              <h1 className="text-sm md:text-base font-bold text-emerald-400 truncate">GameApp</h1>
-              <p className="text-[17px] md:text-xs text-slate-400 font-mono truncate">{userPhone || 'N/A'}</p>
+              <h1 className="text-sm md:text-base font-bold text-emerald-400 truncate">
+                GameApp
+              </h1>
+              <p className="text-[17px] md:text-xs text-slate-400 font-mono truncate">
+                {userPhone || "N/A"}
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
             <div className="text-right">
-              <p className="text-[9px] md:text-[10px] uppercase text-slate-400 font-semibold">ব্যালেন্স</p>
-              {/* ✅ FIX: floating point issue এড়াতে toFixed(2) */}
-              <p className="text-xs md:text-sm font-black text-amber-400 font-mono">৳ {Number(userBalance).toFixed(2)}</p>
+              {/* ✅ টাইটেলে truncate যুক্ত করা হয়েছে */}
+              <p className="text-[9px] md:text-[10px] uppercase text-slate-400 font-semibold truncate">
+                ব্যালেন্স
+              </p>
+              {/* ✅ ব্যালেন্সে truncate যুক্ত করা হয়েছে */}
+              <p className="text-xs md:text-sm font-black text-amber-400 font-mono truncate">
+                ৳ {Number(userBalance).toFixed(2)}
+              </p>
             </div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-          
           <div className="space-y-3 md:space-y-4">
-            
             <div className="grid grid-cols-2 gap-2 md:gap-3">
               <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-3 md:p-4 rounded-xl md:rounded-2xl border border-slate-800 shadow-lg text-center">
-                <p className="text-[10px] md:text-xs text-slate-400 uppercase font-semibold">পিরিয়ড</p>
-                <p className="text-xs md:text-sm font-bold text-emerald-400 font-mono mt-1 truncate">{periodNumber}</p>
+                <p className="text-[10px] md:text-xs text-slate-400 uppercase font-semibold">
+                  পিরিয়ড
+                </p>
+                <p className="text-xs md:text-sm font-bold text-emerald-400 font-mono mt-1 truncate">
+                  {periodNumber}
+                </p>
               </div>
               <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-3 md:p-4 rounded-xl md:rounded-2xl border border-slate-800 shadow-lg text-center">
-                <p className="text-[10px] md:text-xs text-slate-400 uppercase font-semibold">সময় বাকি</p>
-                <p className={`text-sm md:text-base font-black font-mono mt-1 ${timeLeft <= 5 ? 'text-rose-500 animate-pulse' : 'text-amber-400'}`}>
+                <p className="text-[10px] md:text-xs text-slate-400 uppercase font-semibold">
+                  সময় বাকি
+                </p>
+                <p
+                  className={`text-sm md:text-base font-black font-mono mt-1 ${timeLeft <= 5 ? "text-rose-500 animate-pulse" : "text-amber-400"}`}
+                >
                   00:{timeLeft < 10 ? `0${timeLeft}` : timeLeft}
                 </p>
               </div>
             </div>
 
             <div className="bg-slate-900 p-4 md:p-5 rounded-xl md:rounded-2xl border border-slate-800 shadow-lg">
-              <form onSubmit={handlePlaceBet} className="space-y-3 md:space-y-4">
-                
+              <form
+                onSubmit={handlePlaceBet}
+                className="space-y-3 md:space-y-4"
+              >
                 <div className="grid grid-cols-2 gap-2 md:gap-3">
                   <button
                     type="button"
                     disabled={isLocked}
-                    onClick={() => setChoice('Big')}
+                    onClick={() => setChoice("Big")}
                     className={`py-3 md:py-4 rounded-xl font-bold text-sm md:text-base transition cursor-pointer ${
-                      choice === 'Big' 
-                        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white ring-2 ring-emerald-400/50 shadow-lg shadow-emerald-900/40' 
-                        : 'bg-slate-950 text-slate-300 hover:bg-slate-800 border border-slate-800'
-                    } ${isLocked ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      choice === "Big"
+                        ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white ring-2 ring-emerald-400/50 shadow-lg shadow-emerald-900/40"
+                        : "bg-slate-950 text-slate-300 hover:bg-slate-800 border border-slate-800"
+                    } ${isLocked ? "opacity-50 cursor-not-allowed" : ""}`}
                   >
                     BIG 🟢
                   </button>
                   <button
                     type="button"
                     disabled={isLocked}
-                    onClick={() => setChoice('Small')}
+                    onClick={() => setChoice("Small")}
                     className={`py-3 md:py-4 rounded-xl font-bold text-sm md:text-base transition cursor-pointer ${
-                      choice === 'Small' 
-                        ? 'bg-gradient-to-r from-rose-600 to-red-600 text-white ring-2 ring-rose-400/50 shadow-lg shadow-rose-900/40' 
-                        : 'bg-slate-950 text-slate-300 hover:bg-slate-800 border border-slate-800'
-                    } ${isLocked ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      choice === "Small"
+                        ? "bg-gradient-to-r from-rose-600 to-red-600 text-white ring-2 ring-rose-400/50 shadow-lg shadow-rose-900/40"
+                        : "bg-slate-950 text-slate-300 hover:bg-slate-800 border border-slate-800"
+                    } ${isLocked ? "opacity-50 cursor-not-allowed" : ""}`}
                   >
                     SMALL 🔴
                   </button>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] md:text-xs text-slate-400 font-semibold block">অ্যামাউন্ট (টাকা)</label>
+                  <label className="text-[10px] md:text-xs text-slate-400 font-semibold block">
+                    অ্যামাউন্ট (টাকা)
+                  </label>
                   <input
                     type="number"
                     min="1"
@@ -791,13 +828,13 @@ export default function GamePage() {
                     value={amount}
                     onChange={(e) => {
                       const val = e.target.value;
-                      if (val === '' || Number(val) >= 0) setAmount(val);
+                      if (val === "" || Number(val) >= 0) setAmount(val);
                     }}
                     placeholder="পরিমাণ লিখুন..."
-                    className={`w-full bg-slate-950 border border-slate-800 p-3 md:p-3.5 rounded-xl text-xs md:text-sm text-white outline-none focus:border-emerald-500 font-mono ${isLocked ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`w-full bg-slate-950 border border-slate-800 p-3 md:p-3.5 rounded-xl text-xs md:text-sm text-white outline-none focus:border-emerald-500 font-mono ${isLocked ? "opacity-50 cursor-not-allowed" : ""}`}
                     required
                   />
-                  
+
                   <div className="grid grid-cols-4 gap-1.5 md:gap-2 pt-1">
                     {[10, 50, 100, 500].map((val) => (
                       <button
@@ -805,10 +842,14 @@ export default function GamePage() {
                         type="button"
                         disabled={isLocked}
                         // ✅ FIX: floating point issue এড়াতে toFixed(2)
-                        onClick={() => setAmount(prev => {
-                          const next = Number((Number(prev || 0) + val).toFixed(2));
-                          return next.toString();
-                        })}
+                        onClick={() =>
+                          setAmount((prev) => {
+                            const next = Number(
+                              (Number(prev || 0) + val).toFixed(2),
+                            );
+                            return next.toString();
+                          })
+                        }
                         className="bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 py-2 rounded-lg text-[11px] md:text-xs font-bold transition cursor-pointer disabled:opacity-50"
                       >
                         +{val}
@@ -821,9 +862,9 @@ export default function GamePage() {
                   type="submit"
                   disabled={timeLeft <= 5 || isLocked}
                   className={`w-full py-3.5 md:py-4 rounded-xl font-extrabold text-xs md:text-sm transition shadow-md cursor-pointer flex justify-center items-center gap-2 active:scale-95 ${
-                    timeLeft <= 5 || isLocked 
-                      ? 'bg-slate-800 text-slate-500 cursor-not-allowed' 
-                      : 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-emerald-900/30'
+                    timeLeft <= 5 || isLocked
+                      ? "bg-slate-800 text-slate-500 cursor-not-allowed"
+                      : "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-emerald-900/30"
                   }`}
                 >
                   {isLocked ? (
@@ -842,7 +883,6 @@ export default function GamePage() {
                 </button>
               </form>
             </div>
-
           </div>
 
           <div className="bg-slate-900 p-4 md:p-5 rounded-xl md:rounded-2xl border border-slate-800 shadow-lg">
@@ -851,22 +891,31 @@ export default function GamePage() {
                 <i className="fa-solid fa-clock-rotate-left text-emerald-400"></i>
                 সাম্প্রতিক ফলাফল
               </h4>
-              <span className="text-[10px] md:text-xs text-slate-500 font-mono">{globalResults.length} টি</span>
+              <span className="text-[10px] md:text-xs text-slate-500 font-mono">
+                {globalResults.length} টি
+              </span>
             </div>
-            
+
             <div className="bg-slate-950 rounded-xl border border-slate-800/80 overflow-hidden">
               <div className="max-h-[300px] md:max-h-[500px] overflow-y-auto custom-scrollbar">
                 <table className="w-full text-left border-collapse">
                   <thead className="sticky top-0 bg-slate-950 z-10">
                     <tr className="border-b border-slate-800 text-[10px] md:text-xs text-slate-400">
-                      <th className="py-2.5 md:py-3 px-3 md:px-4 font-semibold">পিরিয়ড নাম্বার</th>
-                      <th className="py-2.5 md:py-3 px-3 md:px-4 font-semibold text-right">ফলাফল</th>
+                      <th className="py-2.5 md:py-3 px-3 md:px-4 font-semibold">
+                        পিরিয়ড নাম্বার
+                      </th>
+                      <th className="py-2.5 md:py-3 px-3 md:px-4 font-semibold text-right">
+                        ফলাফল
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-900 text-xs md:text-sm">
                     {globalResults.length === 0 ? (
                       <tr>
-                        <td colSpan="2" className="text-center py-8 text-slate-500 text-[11px] md:text-xs">
+                        <td
+                          colSpan="2"
+                          className="text-center py-8 text-slate-500 text-[11px] md:text-xs"
+                        >
                           <i className="fa-solid fa-inbox text-2xl mb-2 block opacity-50"></i>
                           কোনো ফলাফল নেই এখনো।
                         </td>
@@ -875,18 +924,24 @@ export default function GamePage() {
                       globalResults.map((item, index) => (
                         // ✅ FIX: index এর বদলে periodNumber+direction combination key
                         // periodNumber ডুপ্লিকেট হলে index দিয়ে disambiguate করা হচ্ছে
-                        <tr 
-                          key={`${item.periodNumber}-${item.result}-${index}`} 
+                        <tr
+                          key={`${item.periodNumber}-${item.result}-${index}`}
                           className="hover:bg-slate-900/40 transition"
                         >
-                          <td className="py-2.5 md:py-3 px-3 md:px-4 font-mono text-slate-300 text-[11px] md:text-xs">{item.periodNumber}</td>
+                          <td className="py-2.5 md:py-3 px-3 md:px-4 font-mono text-slate-300 text-[11px] md:text-xs">
+                            {item.periodNumber}
+                          </td>
                           <td className="py-2.5 md:py-3 px-3 md:px-4 text-right">
-                            <span className={`inline-block px-2.5 md:px-3 py-0.5 md:py-1 rounded-lg text-[10px] md:text-xs font-bold ${
-                              item.result === 'Big' || item.result === 'BIG' 
-                                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' 
-                                : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                            }`}>
-                              {item.result === 'Big' || item.result === 'BIG' ? '🟢 ' : '🔴 '}
+                            <span
+                              className={`inline-block px-2.5 md:px-3 py-0.5 md:py-1 rounded-lg text-[10px] md:text-xs font-bold ${
+                                item.result === "Big" || item.result === "BIG"
+                                  ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                                  : "bg-rose-500/20 text-rose-400 border border-rose-500/30"
+                              }`}
+                            >
+                              {item.result === "Big" || item.result === "BIG"
+                                ? "🟢 "
+                                : "🔴 "}
                               {item.result}
                             </span>
                           </td>
@@ -898,7 +953,6 @@ export default function GamePage() {
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>

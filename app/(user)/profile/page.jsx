@@ -872,14 +872,19 @@ export default function UserProfilePage() {
           </span>
         </div>
 
-        {/* ব্যালেন্স কার্ড */}
-        <div className="bg-gradient-to-r from-emerald-900/40 to-slate-900 p-5 rounded-xl border border-emerald-500/30 shadow-lg text-center">
-          <p className="text-xs md:text-sm text-slate-400 uppercase tracking-wider font-semibold">উপলব্ধ ব্যালেন্স</p>
-          <h1 className="text-3xl md:text-4xl font-black text-amber-400 font-mono mt-1">৳{profile.balance || 0}</h1>
-          <p className="text-xs md:text-sm text-slate-400 font-mono mt-1.5">
-            টার্নওভার: <strong className="text-emerald-400">৳{profile.turnover || 0}</strong>
-          </p>
-        </div>
+     {/* ব্যালেন্স কার্ড */}
+<div className="bg-gradient-to-r from-emerald-900/40 to-slate-900 p-5 rounded-xl border border-emerald-500/30 shadow-lg text-left">
+  <p className="text-xs md:text-sm text-slate-400 uppercase tracking-wider font-semibold">
+    উপলব্ধ ব্যালেন্স
+  </p>
+  <h1 className="text-base md:text-lg font-bold text-amber-400 font-mono mt-1 truncate">
+    ৳{profile.balance || 0}
+  </h1>
+  <p className="text-xs md:text-sm text-slate-400 font-mono mt-1.5 truncate">
+    টার্নওভার:{" "}
+    <strong className="text-emerald-400">৳{profile.turnover || 0}</strong>
+  </p>
+</div>
 
         {/* 🎖️ VIP Level Card */}
         <div className="bg-slate-900 p-4 rounded-xl border border-slate-800 shadow-lg space-y-3">

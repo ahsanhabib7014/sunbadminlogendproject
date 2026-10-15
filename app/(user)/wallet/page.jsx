@@ -39,7 +39,7 @@
 
 // // //   const handleLogout = async () => {
 // // //     try {
-// // //       await fetch('/api/auth/logout', { 
+// // //       await fetch('/api/auth/logout', {
 // // //         method: 'POST',
 // // //         credentials: 'include'
 // // //       });
@@ -47,7 +47,7 @@
 // // //       console.error('Logout error:', err);
 // // //     } finally {
 // // //       localStorage.removeItem('user');
-// // //       window.location.replace('/login'); 
+// // //       window.location.replace('/login');
 // // //     }
 // // //   };
 
@@ -55,7 +55,7 @@
 
 // // //   return (
 // // //     <div className="max-w-md mx-auto mt-10 bg-slate-900 p-6 rounded-2xl border border-slate-800 text-white space-y-6 shadow-xl relative">
-      
+
 // // //       <div className="-mb-2">
 // // //         <BackButton title="ফিরে যান" />
 // // //       </div>
@@ -73,7 +73,7 @@
 // // //       <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3 text-center shadow-inner">
 // // //         <p className="text-xs text-slate-400 uppercase tracking-wider">উপলব্ধ মূল ব্যালেন্স</p>
 // // //         <h1 className="text-3xl font-extrabold text-amber-400 font-mono">৳{user.balance || 0}</h1>
-        
+
 // // //         <div className="pt-2 border-t border-slate-800/80 flex justify-between text-xs text-slate-400 px-2 font-mono">
 // // //           <span>টার্নওভার: <strong className="text-emerald-400">৳{user.turnover || 0}</strong></span>
 // // //           <span>আইডি: <strong className="text-white">{user.uid}</strong></span>
@@ -82,18 +82,18 @@
 
 // // //       <div className="space-y-3 pt-2">
 // // //         <p className="text-xs text-slate-400 text-center">আপনার লেনদেন বেছে নিন</p>
-        
+
 // // //         <div className="grid grid-cols-2 gap-4">
-// // //           <Link 
-// // //             href="/deposit" 
+// // //           <Link
+// // //             href="/deposit"
 // // //             className="flex flex-col items-center justify-center bg-emerald-600 hover:bg-emerald-500 p-5 rounded-2xl transition shadow-lg shadow-emerald-950/50 space-y-2 group"
 // // //           >
 // // //             <span className="text-2xl group-hover:scale-110 transition">📥</span>
 // // //             <span className="font-bold text-sm">ডিপোজিট করুন</span>
 // // //           </Link>
 
-// // //           <Link 
-// // //             href="/withdraw" 
+// // //           <Link
+// // //             href="/withdraw"
 // // //             className="flex flex-col items-center justify-center bg-rose-600 hover:bg-rose-500 p-5 rounded-2xl transition shadow-lg shadow-rose-950/50 space-y-2 group"
 // // //           >
 // // //             <span className="text-2xl group-hover:scale-110 transition">📤</span>
@@ -107,8 +107,8 @@
 // // //             <button
 // // //               onClick={() => setActiveTab(activeTab === 'deposit' ? null : 'deposit')}
 // // //               className={`py-2.5 px-1 rounded-xl text-[11px] font-bold border transition flex flex-col items-center justify-center gap-0.5 ${
-// // //                 activeTab === 'deposit' 
-// // //                   ? 'bg-emerald-600 border-emerald-400 text-white shadow-md' 
+// // //                 activeTab === 'deposit'
+// // //                   ? 'bg-emerald-600 border-emerald-400 text-white shadow-md'
 // // //                   : 'bg-slate-950 border-slate-800 text-slate-300 hover:bg-slate-800'
 // // //               }`}
 // // //             >
@@ -119,8 +119,8 @@
 // // //             <button
 // // //               onClick={() => setActiveTab(activeTab === 'withdraw' ? null : 'withdraw')}
 // // //               className={`py-2.5 px-1 rounded-xl text-[11px] font-bold border transition flex flex-col items-center justify-center gap-0.5 ${
-// // //                 activeTab === 'withdraw' 
-// // //                   ? 'bg-rose-600 border-rose-400 text-white shadow-md' 
+// // //                 activeTab === 'withdraw'
+// // //                   ? 'bg-rose-600 border-rose-400 text-white shadow-md'
 // // //                   : 'bg-slate-950 border-slate-800 text-slate-300 hover:bg-slate-800'
 // // //               }`}
 // // //             >
@@ -131,8 +131,8 @@
 // // //             <button
 // // //               onClick={() => setActiveTab(activeTab === 'bet' ? null : 'bet')}
 // // //               className={`py-2.5 px-1 rounded-xl text-[11px] font-bold border transition flex flex-col items-center justify-center gap-0.5 ${
-// // //                 activeTab === 'bet' 
-// // //                   ? 'bg-amber-600 border-amber-400 text-white shadow-md' 
+// // //                 activeTab === 'bet'
+// // //                   ? 'bg-amber-600 border-amber-400 text-white shadow-md'
 // // //                   : 'bg-slate-950 border-slate-800 text-slate-300 hover:bg-slate-800'
 // // //               }`}
 // // //             >
@@ -193,9 +193,9 @@
 
 // //   return (
 // //     <div className="min-h-screen bg-[#07090e] text-slate-100 flex justify-center p-3 md:p-6 pb-24 md:pb-8 font-sans selection:bg-emerald-500 selection:text-white">
-      
+
 // //       <div className="w-full max-w-md md:max-w-2xl space-y-3 md:space-y-4">
-        
+
 // //         {/* হেডার সেকশন (কমপ্যাক্ট) */}
 // //         <div className="flex justify-between items-center bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-lg">
 // //           <h2 className="text-sm font-bold text-emerald-400 flex items-center gap-2 whitespace-nowrap">
@@ -221,16 +221,16 @@
 
 // //         {/* কমপ্যাক্ট অ্যাকশন বাটন (ডিপোজিট এবং উইথড্র) */}
 // //         <div className="grid grid-cols-2 gap-3 md:gap-4">
-// //           <Link 
-// //             href="/deposit" 
+// //           <Link
+// //             href="/deposit"
 // //             className="flex flex-row items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 py-3.5 px-4 rounded-xl transition shadow-lg shadow-emerald-950/40 group"
 // //           >
 // //             <span className="text-xl group-hover:scale-110 transition">📥</span>
 // //             <span className="font-bold text-sm">ডিপোজিট</span>
 // //           </Link>
 
-// //           <Link 
-// //             href="/withdraw" 
+// //           <Link
+// //             href="/withdraw"
 // //             className="flex flex-row items-center justify-center gap-2 bg-rose-600 hover:bg-rose-500 py-3.5 px-4 rounded-xl transition shadow-lg shadow-rose-950/40 group"
 // //           >
 // //             <span className="text-xl group-hover:scale-110 transition">📤</span>
@@ -241,14 +241,14 @@
 // //         {/* হিস্ট্রি সেকশন */}
 // //         <div className="space-y-3 pt-1">
 // //           <p className="text-[11px] md:text-xs text-slate-400 text-center font-semibold uppercase tracking-wider">লেনদেনের ইতিহাস</p>
-          
+
 // //           {/* সেগমেন্টেড ট্যাব ডিজাইন */}
 // //           <div className="grid grid-cols-3 gap-1.5 p-1.5 bg-slate-900 rounded-xl border border-slate-800 shadow-lg">
 // //             <button
 // //               onClick={() => setActiveTab(activeTab === 'deposit' ? null : 'deposit')}
 // //               className={`py-2.5 px-1 rounded-lg text-[11px] md:text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer ${
-// //                 activeTab === 'deposit' 
-// //                   ? 'bg-emerald-600 text-white shadow-md' 
+// //                 activeTab === 'deposit'
+// //                   ? 'bg-emerald-600 text-white shadow-md'
 // //                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
 // //               }`}
 // //             >
@@ -258,8 +258,8 @@
 // //             <button
 // //               onClick={() => setActiveTab(activeTab === 'withdraw' ? null : 'withdraw')}
 // //               className={`py-2.5 px-1 rounded-lg text-[11px] md:text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer ${
-// //                 activeTab === 'withdraw' 
-// //                   ? 'bg-rose-600 text-white shadow-md' 
+// //                 activeTab === 'withdraw'
+// //                   ? 'bg-rose-600 text-white shadow-md'
 // //                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
 // //               }`}
 // //             >
@@ -269,8 +269,8 @@
 // //             <button
 // //               onClick={() => setActiveTab(activeTab === 'bet' ? null : 'bet')}
 // //               className={`py-2.5 px-1 rounded-lg text-[11px] md:text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer ${
-// //                 activeTab === 'bet' 
-// //                   ? 'bg-amber-600 text-white shadow-md' 
+// //                 activeTab === 'bet'
+// //                   ? 'bg-amber-600 text-white shadow-md'
 // //                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
 // //               }`}
 // //             >
@@ -335,9 +335,9 @@
 
 //   return (
 //     <div className="min-h-screen bg-[#07090e] text-slate-100 flex justify-center p-3 md:p-6 pb-24 md:pb-8 font-sans selection:bg-emerald-500 selection:text-white">
-      
+
 //       <div className="w-full max-w-md md:max-w-2xl space-y-3 md:space-y-4">
-        
+
 //         {/* হেডার সেকশন (কমপ্যাক্ট) */}
 //         <div className="flex justify-between items-center bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-lg">
 //           <h2 className="text-sm font-bold text-emerald-400 flex items-center gap-2 whitespace-nowrap">
@@ -363,16 +363,16 @@
 
 //         {/* কমপ্যাক্ট অ্যাকশন বাটন (ডিপোজিট এবং উইথড্র) */}
 //         <div className="grid grid-cols-2 gap-3 md:gap-4">
-//           <Link 
-//             href="/deposit" 
+//           <Link
+//             href="/deposit"
 //             className="flex flex-row items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 py-3.5 px-4 rounded-xl transition shadow-lg shadow-emerald-950/40 group"
 //           >
 //             <span className="text-xl group-hover:scale-110 transition">📥</span>
 //             <span className="font-bold text-sm">ডিপোজিট</span>
 //           </Link>
 
-//           <Link 
-//             href="/withdraw" 
+//           <Link
+//             href="/withdraw"
 //             className="flex flex-row items-center justify-center gap-2 bg-rose-600 hover:bg-rose-500 py-3.5 px-4 rounded-xl transition shadow-lg shadow-rose-950/40 group"
 //           >
 //             <span className="text-xl group-hover:scale-110 transition">📤</span>
@@ -383,14 +383,14 @@
 //         {/* হিস্ট্রি সেকশন */}
 //         <div className="space-y-3 pt-1">
 //           <p className="text-[11px] md:text-xs text-slate-400 text-center font-semibold uppercase tracking-wider">লেনদেনের ইতিহাস</p>
-          
+
 //           {/* সেগমেন্টেড ট্যাব ডিজাইন */}
 //           <div className="grid grid-cols-3 gap-1.5 p-1.5 bg-slate-900 rounded-xl border border-slate-800 shadow-lg">
 //             <button
 //               onClick={() => setActiveTab(activeTab === 'deposit' ? null : 'deposit')}
 //               className={`py-2.5 px-1 rounded-lg text-[11px] md:text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer ${
-//                 activeTab === 'deposit' 
-//                   ? 'bg-emerald-600 text-white shadow-md' 
+//                 activeTab === 'deposit'
+//                   ? 'bg-emerald-600 text-white shadow-md'
 //                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
 //               }`}
 //             >
@@ -400,8 +400,8 @@
 //             <button
 //               onClick={() => setActiveTab(activeTab === 'withdraw' ? null : 'withdraw')}
 //               className={`py-2.5 px-1 rounded-lg text-[11px] md:text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer ${
-//                 activeTab === 'withdraw' 
-//                   ? 'bg-rose-600 text-white shadow-md' 
+//                 activeTab === 'withdraw'
+//                   ? 'bg-rose-600 text-white shadow-md'
 //                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
 //               }`}
 //             >
@@ -411,8 +411,8 @@
 //             <button
 //               onClick={() => setActiveTab(activeTab === 'bet' ? null : 'bet')}
 //               className={`py-2.5 px-1 rounded-lg text-[11px] md:text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer ${
-//                 activeTab === 'bet' 
-//                   ? 'bg-amber-600 text-white shadow-md' 
+//                 activeTab === 'bet'
+//                   ? 'bg-amber-600 text-white shadow-md'
 //                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
 //               }`}
 //             >
@@ -436,14 +436,14 @@
 
 // .........................................
 
-'use client';
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+"use client";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-import DepositHistorySection from '@/components/deposithistoryfetch';
-import WithdrawHistorySection from '@/components/withdrowhistryfeatch';
-import BetHistorySection from '@/components/bethistryfeatch';
+import DepositHistorySection from "@/components/deposithistoryfetch";
+import WithdrawHistorySection from "@/components/withdrowhistryfeatch";
+import BetHistorySection from "@/components/bethistryfeatch";
 
 export default function WalletPage() {
   const [user, setUser] = useState({ balance: 0, turnover: 0 });
@@ -451,9 +451,9 @@ export default function WalletPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const savedUser = JSON.parse(localStorage.getItem('user') || '{}');
+    const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
     if (!savedUser.uid) {
-      router.push('/login');
+      router.push("/login");
       return;
     }
 
@@ -465,11 +465,11 @@ export default function WalletPage() {
     });
 
     // ✅ FIX: /api/user/me ব্যবহার করা হচ্ছে (admin API-র বদলে)
-    fetch('/api/user/me', {
-      credentials: 'include'
+    fetch("/api/user/me", {
+      credentials: "include",
     })
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         if (data.success && data.user) {
           // ✅ FIX #2: সব field Number-এ convert
           const currentUser = {
@@ -478,19 +478,17 @@ export default function WalletPage() {
             turnover: Number(data.user.turnover) || 0,
           };
           setUser(currentUser);
-          localStorage.setItem('user', JSON.stringify(currentUser));
+          localStorage.setItem("user", JSON.stringify(currentUser));
         }
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   }, [router]);
 
   const uidToFetch = user.phone || user.uid;
 
   return (
     <div className="min-h-screen bg-[#07090e] text-slate-100 flex justify-center p-3 md:p-6 pb-24 md:pb-8 font-sans selection:bg-emerald-500 selection:text-white">
-      
       <div className="w-full max-w-md md:max-w-2xl space-y-3 md:space-y-4">
-        
         {/* হেডার সেকশন (কমপ্যাক্ট) */}
         <div className="flex justify-between items-center bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-lg">
           <h2 className="text-sm font-bold text-emerald-400 flex items-center gap-2 whitespace-nowrap">
@@ -504,28 +502,42 @@ export default function WalletPage() {
           </button>
         </div>
 
-        {/* ব্যালেন্স কার্ড */}
-        <div className="bg-gradient-to-r from-emerald-900/40 to-slate-900 p-5 md:p-6 rounded-2xl border border-emerald-500/30 shadow-xl text-center">
-          <p className="text-[11px] md:text-xs text-slate-400 uppercase tracking-wider font-semibold">উপলব্ধ মূল ব্যালেন্স</p>
-          <h1 className="text-3xl md:text-4xl font-black text-amber-400 font-mono mt-1">৳{user.balance || 0}</h1>
-          <div className="mt-3 pt-3 border-t border-slate-800/80 flex justify-center gap-6 text-xs md:text-sm text-slate-400 font-mono">
-            <span>টার্নওভার: <strong className="text-emerald-400">৳{user.turnover || 0}</strong></span>
-            <span>আইডি: <strong className="text-white">{user.uid}</strong></span>
-          </div>
-        </div>
+{/* ব্যালেন্স কার্ড */}
+<div className="bg-gradient-to-r from-emerald-900/40 to-slate-900 p-5 md:p-6 rounded-2xl border border-emerald-500/30 shadow-xl text-left">
+  <p className="text-[11px] md:text-xs text-slate-400 uppercase tracking-wider font-semibold">
+    উপলব্ধ মূল ব্যালেন্স
+  </p>
+  {/* ✅ ব্যালেন্সে truncate */}
+  <h1 className="text-base md:text-lg font-bold text-amber-400 font-mono mt-1 truncate">
+    ৳{user.balance || 0}
+  </h1>
+  <div className="mt-3 pt-3 border-t border-slate-800/80 flex flex-col gap-1.5 text-xs md:text-sm text-slate-400 font-mono">
+    {/* ✅ টার্নওভারে truncate */}
+    <span className="truncate">
+      টার্নওভার:{" "}
+      <strong className="text-emerald-400">
+        ৳{user.turnover || 0}
+      </strong>
+    </span>
+    {/* ✅ আইডিতে truncate */}
+    <span className="truncate">
+      আইডি: <strong className="text-white">{user.uid}</strong>
+    </span>
+  </div>
+</div>
 
         {/* কমপ্যাক্ট অ্যাকশন বাটন (ডিপোজিট এবং উইথড্র) */}
         <div className="grid grid-cols-2 gap-3 md:gap-4">
-          <Link 
-            href="/deposit" 
+          <Link
+            href="/deposit"
             className="flex flex-row items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 py-3.5 px-4 rounded-xl transition shadow-lg shadow-emerald-950/40 group"
           >
             <span className="text-xl group-hover:scale-110 transition">📥</span>
             <span className="font-bold text-sm">ডিপোজিট</span>
           </Link>
 
-          <Link 
-            href="/withdraw" 
+          <Link
+            href="/withdraw"
             className="flex flex-row items-center justify-center gap-2 bg-rose-600 hover:bg-rose-500 py-3.5 px-4 rounded-xl transition shadow-lg shadow-rose-950/40 group"
           >
             <span className="text-xl group-hover:scale-110 transition">📤</span>
@@ -535,38 +547,44 @@ export default function WalletPage() {
 
         {/* হিস্ট্রি সেকশন */}
         <div className="space-y-3 pt-1">
-          <p className="text-[11px] md:text-xs text-slate-400 text-center font-semibold uppercase tracking-wider">লেনদেনের ইতিহাস</p>
-          
+          <p className="text-[11px] md:text-xs text-slate-400 text-center font-semibold uppercase tracking-wider">
+            লেনদেনের ইতিহাস
+          </p>
+
           {/* সেগমেন্টেড ট্যাব ডিজাইন */}
           <div className="grid grid-cols-3 gap-1.5 p-1.5 bg-slate-900 rounded-xl border border-slate-800 shadow-lg">
             <button
-              onClick={() => setActiveTab(activeTab === 'deposit' ? null : 'deposit')}
+              onClick={() =>
+                setActiveTab(activeTab === "deposit" ? null : "deposit")
+              }
               className={`py-2.5 px-1 rounded-lg text-[11px] md:text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer ${
-                activeTab === 'deposit' 
-                  ? 'bg-emerald-600 text-white shadow-md' 
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                activeTab === "deposit"
+                  ? "bg-emerald-600 text-white shadow-md"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
               }`}
             >
               <span>📥</span> ডিপোজিট
             </button>
 
             <button
-              onClick={() => setActiveTab(activeTab === 'withdraw' ? null : 'withdraw')}
+              onClick={() =>
+                setActiveTab(activeTab === "withdraw" ? null : "withdraw")
+              }
               className={`py-2.5 px-1 rounded-lg text-[11px] md:text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer ${
-                activeTab === 'withdraw' 
-                  ? 'bg-rose-600 text-white shadow-md' 
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                activeTab === "withdraw"
+                  ? "bg-rose-600 text-white shadow-md"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
               }`}
             >
               <span>📤</span> উইথড্র
             </button>
 
             <button
-              onClick={() => setActiveTab(activeTab === 'bet' ? null : 'bet')}
+              onClick={() => setActiveTab(activeTab === "bet" ? null : "bet")}
               className={`py-2.5 px-1 rounded-lg text-[11px] md:text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer ${
-                activeTab === 'bet' 
-                  ? 'bg-amber-600 text-white shadow-md' 
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                activeTab === "bet"
+                  ? "bg-amber-600 text-white shadow-md"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
               }`}
             >
               <span>🎲</span> বেট হিস্ট্রি
@@ -575,13 +593,26 @@ export default function WalletPage() {
 
           {/* হিস্ট্রি সেকশনগুলো */}
           <div className="pt-1">
-            {activeTab === 'deposit' && <DepositHistorySection uid={uidToFetch} onClose={() => setActiveTab(null)} />}
-            {activeTab === 'withdraw' && <WithdrawHistorySection uid={uidToFetch} onClose={() => setActiveTab(null)} />}
-            {activeTab === 'bet' && <BetHistorySection uid={uidToFetch} onClose={() => setActiveTab(null)} />}
+            {activeTab === "deposit" && (
+              <DepositHistorySection
+                uid={uidToFetch}
+                onClose={() => setActiveTab(null)}
+              />
+            )}
+            {activeTab === "withdraw" && (
+              <WithdrawHistorySection
+                uid={uidToFetch}
+                onClose={() => setActiveTab(null)}
+              />
+            )}
+            {activeTab === "bet" && (
+              <BetHistorySection
+                uid={uidToFetch}
+                onClose={() => setActiveTab(null)}
+              />
+            )}
           </div>
-
         </div>
-
       </div>
     </div>
   );
