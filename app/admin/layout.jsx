@@ -247,6 +247,10 @@ export default async function AdminLayout({ children }) {
           {/* <Link href="/admin/bonus-settings" className="flex flex-col items-center hover:text-pink-400 transition flex-1">
             <i className="fa-solid fa-gift text-base mb-1"></i> বোনাস
           </Link> */}
+
+          <Link href="/admin/audit-logs" className="flex flex-col items-center hover:text-emerald-400 transition flex-1">
+            <i className="fa-solid fa-clock-rotate-left text-base mb-1"></i> অডিট লগ
+          </Link>
           
           <Link href="/admin/payment-methods" className="flex flex-col items-center hover:text-emerald-400 transition flex-1">
             <i className="fa-solid fa-gears text-base mb-1"></i> মেথডস
