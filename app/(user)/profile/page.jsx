@@ -928,10 +928,10 @@ export default function UserProfilePage() {
               <p className="font-mono text-xs md:text-sm text-slate-300 truncate">{profile.ipAddress || 'N/A'}</p>
             </div>
 
-            <div className="bg-slate-950 p-3 rounded-lg border border-slate-800">
+            {/* <div className="bg-slate-950 p-3 rounded-lg border border-slate-800">
               <p className="text-[10px] md:text-xs text-slate-500 uppercase font-semibold mb-1">রেফারেল বোনাস</p>
               <p className="font-bold text-amber-400 font-mono text-sm md:text-base">৳{profile.referralBalance || 0}</p>
-            </div>
+            </div> */}
 
             <div className="bg-slate-950 p-3 rounded-lg border border-slate-800 col-span-2">
               <p className="text-[10px] md:text-xs text-slate-500 uppercase font-semibold mb-1">মোট ডিপোজিট</p>
