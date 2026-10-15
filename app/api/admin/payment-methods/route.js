@@ -251,45 +251,36 @@
 // }
 
 // ///////////////////////////////////////
-import { NextResponse } from 'next/server';
+      import { NextResponse } from 'next/server';
 import dbConnect from '@/utils/db';
-import Setting from '@/models/Setting';
+import PaymentMethod from '@/models/PaymentMethod';
 import { verifyAuth } from '@/utils/authCheck';
-import AuditLog from '@/models/AuditLog'; // ✅ অডিট লগ মডেল ইমপোর্ট করা হলো
+import AuditLog from '@/models/AuditLog';
 
-const DEFAULT_RATE = 120;
-
-// GET: Current rate (লগইন করা ইউজার এবং অ্যাডমিন উভয়ই রিড করতে পারবে)
+// GET: পেমেন্ট মেথডগুলো ফেচ করা
 export async function GET(req) {
   try {
     await dbConnect();
 
-    const auth = await verifyAuth(); 
+    const auth = await verifyAuth('admin');
     if (!auth.success) {
-      return NextResponse.json({ success: false, message: auth.message || 'অনুমতি নেই!' }, { status: auth.status || 401 });
+      return NextResponse.json({ success: false, message: auth.message }, { status: auth.status });
     }
 
-    const setting = await Setting.findOne({ key: 'usdToBdtRate' });
-    const rate = setting?.value || DEFAULT_RATE;
+    const methods = await PaymentMethod.find({}).sort({ createdAt: -1 });
 
     return NextResponse.json({ 
       success: true, 
-      rate: Number(rate),
-      updatedAt: setting?.updatedAt || null,
-      source: setting ? 'database' : 'default'
+      methods: Array.isArray(methods) ? methods : [] 
     }, { status: 200 });
 
   } catch (error) {
-    console.error('Exchange Rate GET Error:', error);
-    return NextResponse.json({ 
-      success: false, 
-      message: 'সার্ভার এরর!',
-      rate: DEFAULT_RATE
-    }, { status: 500 });
+    console.error('Get Payment Methods Error:', error);
+    return NextResponse.json({ success: false, methods: [], message: 'সার্ভার ত্রুটি ঘটেছে!' }, { status: 500 });
   }
 }
 
-// POST: Update rate (এটি অ্যাডমিনের জন্য সুরক্ষিত থাকবে)
+// POST: নতুন পেমেন্ট মেথড যোগ করা
 export async function POST(req) {
   try {
     await dbConnect();
@@ -299,79 +290,151 @@ export async function POST(req) {
       return NextResponse.json({ success: false, message: auth.message }, { status: auth.status });
     }
 
-    const adminUser = auth.user; // ✅ অ্যাডমিন বা সাব-অ্যাডমিন ইউজার অবজেক্ট
+    const adminUser = auth.user;
+    const body = await req.json();
+    const { methodName } = body;
 
-    let body;
-    try {
-      body = await req.json();
-    } catch (e) {
-      return NextResponse.json({ success: false, message: 'অবৈধ ডেটা!' }, { status: 400 });
+    if (!methodName || !methodName.trim()) {
+      return NextResponse.json({ success: false, message: 'মেথডের নাম আবশ্যক!' }, { status: 400 });
     }
 
-    const { rate } = body || {};
-    const parsedRate = Number(rate);
+    const cleanName = methodName.trim();
 
-    if (isNaN(parsedRate) || parsedRate <= 0) {
-      return NextResponse.json({ 
-        success: false, 
-        message: 'সঠিক rate দিন (ধনাত্মক সংখ্যা)!' 
-      }, { status: 400 });
+    const existing = await PaymentMethod.findOne({ methodName: new RegExp(`^${cleanName}$`, 'i') });
+    if (existing) {
+      return NextResponse.json({ success: false, message: 'এই নামের পেমেন্ট মেথড ইতিমধ্যে রয়েছে!' }, { status: 400 });
     }
 
-    if (parsedRate < 50 || parsedRate > 500) {
-      return NextResponse.json({ 
-        success: false, 
-        message: 'Rate অবশ্যই ৫০ থেকে ৫০০ এর মধ্যে হতে হবে!' 
-      }, { status: 400 });
-    }
+    const newMethod = await PaymentMethod.create({
+      methodName: cleanName,
+      isActive: true
+    });
 
-    // আপডেট করার আগে আগের এক্সচেঞ্জ রেট বা সেটিং ধরে রাখা
-    const existingSetting = await Setting.findOne({ key: 'usdToBdtRate' });
-    const oldRate = existingSetting?.value || DEFAULT_RATE;
-
-    const updated = await Setting.findOneAndUpdate(
-      { key: 'usdToBdtRate' },
-      { value: parsedRate },
-      { upsert: true, new: true }
-    );
-
-    // ==========================================
-    // ✅ অডিট লগ সেভ করা (oldData এবং newData সহ)
-    // ==========================================
     if (adminUser) {
       const ip = req.headers.get('x-forwarded-for') || '127.0.0.1';
       await AuditLog.create({
         adminId: adminUser._id,
         adminPhone: adminUser.phone || adminUser.uid,
-        action: 'UPDATE_EXCHANGE_RATE',
-        targetUser: 'SYSTEM_SETTINGS',
-        oldData: {
-          key: 'usdToBdtRate',
-          rate: Number(oldRate)
-        },
-        newData: {
-          key: 'usdToBdtRate',
-          rate: Number(parsedRate)
-        },
-        details: `অ্যাডমিন (${adminUser.phone || adminUser.uid}) কর্তৃক ইউএসডি এক্সচেঞ্জ রেট ৳${oldRate} থেকে পরিবর্তন করে ৳${parsedRate} করা হয়েছে।`,
+        action: 'CREATE_PAYMENT_METHOD',
+        targetUser: 'PAYMENT_METHOD',
+        oldData: {},
+        newData: { methodName: cleanName },
+        details: `অ্যাডমিন (${adminUser.phone || adminUser.uid}) কর্তৃক নতুন পেমেন্ট মেথড (${cleanName}) যুক্ত করা হয়েছে।`,
         ipAddress: ip
       });
     }
 
     return NextResponse.json({ 
       success: true, 
-      message: `✅ Exchange rate সফলভাবে ৳${parsedRate} এ আপডেট হয়েছে!`,
-      rate: parsedRate,
-      updatedAt: updated.updatedAt
-    }, { status: 200 });
+      message: 'পেমেন্ট মেথড সফলভাবে যোগ করা হয়েছে!', 
+      method: newMethod 
+    }, { status: 201 });
 
   } catch (error) {
-    console.error('Exchange Rate POST Error:', error);
-    return NextResponse.json({ 
-      success: false, 
-      message: 'সার্ভার এরর!' 
-    }, { status: 500 });
+    console.error('Create Payment Method Error:', error);
+    return NextResponse.json({ success: false, message: 'সার্ভার ত্রুটি ঘটেছে!' }, { status: 500 });
   }
 }
 
-////////////////////////////////////////////
+// PUT: স্ট্যাটাস অন/অফ করা
+export async function PUT(req) {
+  try {
+    await dbConnect();
+
+    const auth = await verifyAuth('admin');
+    if (!auth.success) {
+      return NextResponse.json({ success: false, message: auth.message }, { status: auth.status });
+    }
+
+    const adminUser = auth.user;
+    const body = await req.json();
+    const { id, isActive } = body;
+
+    if (!id) {
+      return NextResponse.json({ success: false, message: 'আইডি পাওয়া যায়নি!' }, { status: 400 });
+    }
+
+    const existing = await PaymentMethod.findById(id);
+    if (!existing) {
+      return NextResponse.json({ success: false, message: 'পেমেন্ট মেথড পাওয়া যায়নি!' }, { status: 404 });
+    }
+
+    const updatedMethod = await PaymentMethod.findByIdAndUpdate(
+      id,
+      { isActive },
+      { new: true }
+    );
+
+    if (adminUser) {
+      const ip = req.headers.get('x-forwarded-for') || '127.0.0.1';
+      await AuditLog.create({
+        adminId: adminUser._id,
+        adminPhone: adminUser.phone || adminUser.uid,
+        action: 'UPDATE_PAYMENT_METHOD',
+        targetUser: 'PAYMENT_METHOD',
+        oldData: { id: existing._id, isActive: existing.isActive },
+        newData: { id: updatedMethod._id, isActive: updatedMethod.isActive },
+        details: `অ্যাডমিন (${adminUser.phone || adminUser.uid}) কর্তৃক পেমেন্ট মেথড (${updatedMethod.methodName}) স্ট্যাটাস ${isActive ? 'চালু' : 'বন্ধ'} করা হয়েছে।`,
+        ipAddress: ip
+      });
+    }
+
+    return NextResponse.json({ 
+      success: true, 
+      message: `মেথডটি সফলভাবে ${isActive ? 'চালু' : 'বন্ধ'} করা হয়েছে!`, 
+      method: updatedMethod 
+    }, { status: 200 });
+
+  } catch (error) {
+    console.error('Update Payment Method Error:', error);
+    return NextResponse.json({ success: false, message: 'সার্ভার ত্রুটি ঘটেছে!' }, { status: 500 });
+  }
+}
+
+// DELETE: ডিলিট করা
+export async function DELETE(req) {
+  try {
+    await dbConnect();
+
+    const auth = await verifyAuth('admin');
+    if (!auth.success) {
+      return NextResponse.json({ success: false, message: auth.message }, { status: auth.status });
+    }
+
+    const adminUser = auth.user;
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json({ success: false, message: 'আইডি প্রয়োজন!' }, { status: 400 });
+    }
+
+    const deleted = await PaymentMethod.findByIdAndDelete(id);
+    if (!deleted) {
+      return NextResponse.json({ success: false, message: 'পেমেন্ট মেথড পাওয়া যায়নি!' }, { status: 404 });
+    }
+
+    if (adminUser) {
+      const ip = req.headers.get('x-forwarded-for') || '127.0.0.1';
+      await AuditLog.create({
+        adminId: adminUser._id,
+        adminPhone: adminUser.phone || adminUser.uid,
+        action: 'DELETE_PAYMENT_METHOD',
+        targetUser: 'PAYMENT_METHOD',
+        oldData: { id: deleted._id, methodName: deleted.methodName },
+        newData: { status: 'deleted' },
+        details: `অ্যাডমিন (${adminUser.phone || adminUser.uid}) কর্তৃক পেমেন্ট মেথড (${deleted.methodName}) ডিলিট করা হয়েছে।`,
+        ipAddress: ip
+      });
+    }
+
+    return NextResponse.json({ 
+      success: true, 
+      message: 'পেমেন্ট মেথড সফলভাবে ডিলিট করা হয়েছে!' 
+    }, { status: 200 });
+
+  } catch (error) {
+    console.error('Delete Payment Method Error:', error);
+    return NextResponse.json({ success: false, message: 'সার্ভার ত্রুটি ঘটেছে!' }, { status: 500 });
+  }
+}
