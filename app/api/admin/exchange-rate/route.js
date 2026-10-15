@@ -463,11 +463,11 @@ export async function POST(req) {
     const existingSetting = await Setting.findOne({ key: 'usdToBdtRate' });
     const oldRate = existingSetting ? existingSetting.value : DEFAULT_RATE;
 
-    const updated = await Setting.findOneAndUpdate(
-      { key: 'usdToBdtRate' },
-      { value: parsedRate },
-      { upsert: true, new: true }
-    );
+   const updated = await Setting.findOneAndUpdate(
+  { key: 'usdToBdtRate' },
+  { value: parsedRate },
+  { upsert: true, returnDocument: 'after' }
+);
 
     // অডিট লগ তৈরি করা
     if (adminUser) {
