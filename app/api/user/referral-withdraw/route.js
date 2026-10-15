@@ -188,7 +188,7 @@ export async function POST(request) {
         referralBalance: { $gte: balanceDeduction }
       },
       { $inc: { referralBalance: -balanceDeduction } },
-      { new: true }
+      { returnDocument: 'after' }
     );
 
     if (!updatedUser) {

@@ -83,7 +83,7 @@ export async function POST(request) {
         const updatedUser = await User.findOneAndUpdate(
           { uid: withdraw.uid },
           { $inc: { [balanceField]: refundAmount } },
-          { new: true }
+          { returnDocument: 'after' }
         );
 
         if (updatedUser) {

@@ -228,7 +228,7 @@ export async function POST(req) {
         balance: { $gte: balanceDeduction }
       },
       { $inc: { balance: -balanceDeduction } },
-      { new: true }
+      { returnDocument: 'after' }
     );
 
     if (!updatedUser) {

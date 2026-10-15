@@ -189,7 +189,7 @@ export async function POST(req) {
           balance: { $gte: amount }   // ✅ balance যথেষ্ট হলে তবেই deduct হবে
         },
         { $inc: { balance: -amount } },
-        { new: true }
+        { returnDocument: 'after' }
       );
 
       if (!updatedUser) {
