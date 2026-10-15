@@ -1,8 +1,195 @@
+// // // // import { NextResponse } from 'next/server';
+// // // // import clientPromise from '@/lib/mongodb';
+// // // // import Withdraw from '@/models/Withdraw';
+// // // // import User from '@/models/User';
+// // // // import { verifyAuth } from '@/utils/authCheck';
+
+// // // // // ✅ সঠিক refund calculation
+// // // // const calculateRefundAmount = (withdraw) => {
+// // // //   if (withdraw.deductedBDT && Number(withdraw.deductedBDT) > 0) {
+// // // //     return Number(withdraw.deductedBDT);
+// // // //   }
+// // // //   if (withdraw.originalCurrency === 'USD' && withdraw.exchangeRate && Number(withdraw.exchangeRate) > 0) {
+// // // //     return Math.round(Number(withdraw.amount) * Number(withdraw.exchangeRate));
+// // // //   }
+// // // //   return Number(withdraw.amount) || 0;
+// // // // };
+
+// // // // export async function GET(request) {
+// // // //   try {
+// // // //     await clientPromise;
+// // // //     const auth = await verifyAuth('admin');
+// // // //     if (!auth.success) {
+// // // //       return NextResponse.json({ success: false, message: auth.message }, { status: auth.status });
+// // // //     }
+
+// // // //     let withdraws = await Withdraw.find({}).lean();
+// // // //     withdraws.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+// // // //     return NextResponse.json({ success: true, withdraws }, { status: 200 });
+// // // //   } catch (error) {
+// // // //     return NextResponse.json({ success: false, withdraws: [], error: error.message }, { status: 500 });
+// // // //   }
+// // // // }
+
+// // // // export async function PATCH(request) {
+// // // //   try {
+// // // //     await clientPromise;
+
+// // // //     const auth = await verifyAuth('admin');
+// // // //     if (!auth.success) {
+// // // //       return NextResponse.json({ success: false, message: auth.message }, { status: auth.status });
+// // // //     }
+
+// // // //     let body;
+// // // //     try { body = await request.json(); } catch (e) {
+// // // //       return NextResponse.json({ success: false, message: 'Invalid JSON' }, { status: 400 });
+// // // //     }
+
+// // // //     const { withdrawId, status, adminNote } = body || {};
+// // // //     if (!withdrawId) {
+// // // //       return NextResponse.json({ success: false, message: 'Withdraw ID প্রয়োজন!' }, { status: 400 });
+// // // //     }
+
+// // // //     const cleanNote = typeof adminNote === 'string' ? adminNote.trim().slice(0, 200) : '';
+
+// // // //     // নোট only
+// // // //     if (!status) {
+// // // //       const updated = await Withdraw.findByIdAndUpdate(
+// // // //         withdrawId, { $set: { adminNote: cleanNote } }, { new: true }
+// // // //       );
+// // // //       return NextResponse.json({ success: true, message: '✅ নোট আপডেট হয়েছে!', withdraw: updated }, { status: 200 });
+// // // //     }
+
+// // // //     // status সহ
+// // // //     const updateData = { status };
+// // // //     if (cleanNote) updateData.adminNote = cleanNote;
+
+// // // //     const updatedWithdraw = await Withdraw.findOneAndUpdate(
+// // // //       { _id: withdrawId, status: 'pending' },
+// // // //       { $set: updateData },
+// // // //       { new: true }
+// // // //     );
+
+// // // //     if (!updatedWithdraw) {
+// // // //       return NextResponse.json({ success: false, message: 'ইতিমধ্যে প্রসেস হয়েছে' }, { status: 409 });
+// // // //     }
+
+// // // //     // ✅ Reject + Refund
+// // // //     let refundInfo = null;
+
+// // // //     if (status === 'rejected') {
+// // // //       const targetUserId = updatedWithdraw.uid || updatedWithdraw.userId;
+// // // //       const walletType = updatedWithdraw.walletType || 'main';
+// // // //       const refundAmount = calculateRefundAmount(updatedWithdraw);
+
+// // // //       console.log('💸 Refund:');
+// // // //       console.log('  amount:', updatedWithdraw.amount);
+// // // //       console.log('  deductedBDT:', updatedWithdraw.deductedBDT);
+// // // //       console.log('  exchangeRate:', updatedWithdraw.exchangeRate);
+// // // //       console.log('  → refundAmount:', refundAmount);
+
+// // // //       if (targetUserId && refundAmount > 0) {
+// // // //         const balanceField = walletType === 'referral' ? 'referralBalance' : 'balance';
+// // // //         const updatedUser = await User.findOneAndUpdate(
+// // // //           { uid: targetUserId },
+// // // //           { $inc: { [balanceField]: refundAmount } },
+// // // //           { new: true }
+// // // //         );
+
+// // // //         if (updatedUser) {
+// // // //           refundInfo = {
+// // // //             refundAmount,
+// // // //             newBalance: updatedUser.balance,
+// // // //             newReferralBalance: updatedUser.referralBalance
+// // // //           };
+// // // //           console.log('  ✅ Refund সফল:', refundInfo);
+// // // //         }
+// // // //       }
+// // // //     }
+
+// // // //     return NextResponse.json({
+// // // //       success: true,
+// // // //       message: status === 'rejected'
+// // // //         ? `✅ উইথড্র বাতিল হয়েছে এবং ৳${refundInfo?.refundAmount || 0} ফেরত দেওয়া হয়েছে`
+// // // //         : '✅ উইথড্র কনফার্ম হয়েছে',
+// // // //       withdraw: updatedWithdraw,
+// // // //       refundInfo     // ← ✅ এইটা response-এ যাচ্ছে
+// // // //     }, { status: 200 });
+
+// // // //   } catch (error) {
+// // // //     console.error('PATCH Error:', error);
+// // // //     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+// // // //   }
+// // // // }
+
+// // // // export async function POST(request) {
+// // // //   try {
+// // // //     await clientPromise;
+// // // //     const auth = await verifyAuth('admin');
+// // // //     if (!auth.success) {
+// // // //       return NextResponse.json({ success: false, message: auth.message }, { status: auth.status });
+// // // //     }
+
+// // // //     const { withdrawId, action } = await request.json();
+// // // //     if (!withdrawId || !action) {
+// // // //       return NextResponse.json({ success: false, message: 'প্রয়োজনীয় তথ্য নেই' }, { status: 400 });
+// // // //     }
+
+// // // //     const withdraw = await Withdraw.findById(withdrawId);
+// // // //     if (!withdraw || withdraw.status !== 'pending') {
+// // // //       return NextResponse.json({ success: false, message: 'পাওয়া যায়নি বা প্রসেস হয়েছে' }, { status: 400 });
+// // // //     }
+
+// // // //     if (action === 'approve') {
+// // // //       withdraw.status = 'approved';
+// // // //       await withdraw.save();
+// // // //       return NextResponse.json({ success: true, message: '✅ অ্যাপ্রুভ' }, { status: 200 });
+// // // //     }
+
+// // // //     if (action === 'reject') {
+// // // //       withdraw.status = 'rejected';
+// // // //       await withdraw.save();
+
+// // // //       const walletType = withdraw.walletType || 'main';
+// // // //       const refundAmount = calculateRefundAmount(withdraw);
+
+// // // //       let refundInfo = null;
+// // // //       if (refundAmount > 0) {
+// // // //         const balanceField = walletType === 'referral' ? 'referralBalance' : 'balance';
+// // // //         const updatedUser = await User.findOneAndUpdate(
+// // // //           { uid: withdraw.uid },
+// // // //           { $inc: { [balanceField]: refundAmount } },
+// // // //           { new: true }
+// // // //         );
+// // // //         if (updatedUser) {
+// // // //           refundInfo = {
+// // // //             refundAmount,
+// // // //             newBalance: updatedUser.balance,
+// // // //             newReferralBalance: updatedUser.referralBalance
+// // // //           };
+// // // //         }
+// // // //       }
+
+// // // //       return NextResponse.json({
+// // // //         success: true,
+// // // //         message: `✅ ৳${refundAmount} রিফান্ড`,
+// // // //         refundInfo
+// // // //       }, { status: 200 });
+// // // //     }
+
+// // // //     return NextResponse.json({ success: false, message: 'ভুল action' }, { status: 400 });
+// // // //   } catch (error) {
+// // // //     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+// // // //   }
+// // // // }
+// // // // ////////////////////////////////////////////////////////////////
 // // // import { NextResponse } from 'next/server';
 // // // import clientPromise from '@/lib/mongodb';
 // // // import Withdraw from '@/models/Withdraw';
 // // // import User from '@/models/User';
 // // // import { verifyAuth } from '@/utils/authCheck';
+// // // import AuditLog from '@/models/AuditLog'; // ✅ অডিট লগ মডেল ইমপোর্ট করা হলো
 
 // // // // ✅ সঠিক refund calculation
 // // // const calculateRefundAmount = (withdraw) => {
@@ -41,6 +228,8 @@
 // // //       return NextResponse.json({ success: false, message: auth.message }, { status: auth.status });
 // // //     }
 
+// // //     const adminUser = auth.user; // ✅ সাব-অ্যাডমিন বা অ্যাডমিন ইউজার অবজেক্ট
+
 // // //     let body;
 // // //     try { body = await request.json(); } catch (e) {
 // // //       return NextResponse.json({ success: false, message: 'Invalid JSON' }, { status: 400 });
@@ -58,6 +247,20 @@
 // // //       const updated = await Withdraw.findByIdAndUpdate(
 // // //         withdrawId, { $set: { adminNote: cleanNote } }, { new: true }
 // // //       );
+
+// // //       // ✅ নোট আপডেটের অডিট লগ (যদি সাব-অ্যাডমিন হয়)
+// // //       if (adminUser && adminUser.role === 'sub-admin' && updated) {
+// // //         const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
+// // //         await AuditLog.create({
+// // //           adminId: adminUser._id,
+// // //           adminPhone: adminUser.phone || adminUser.uid,
+// // //           action: 'UPDATE_WITHDRAW_NOTE',
+// // //           targetUser: updated.uid || updated.userId,
+// // //           details: `সাব-অ্যাডমিন (${adminUser.phone}) উইথড্রতে নোট আপডেট করেছেন।`,
+// // //           ipAddress: ip
+// // //         });
+// // //       }
+
 // // //       return NextResponse.json({ success: true, message: '✅ নোট আপডেট হয়েছে!', withdraw: updated }, { status: 200 });
 // // //     }
 
@@ -108,13 +311,30 @@
 // // //       }
 // // //     }
 
+// // //     // ==========================================
+// // //     // ✅ সাব-অ্যাডমিন অ্যাকশনের অডিট লগ সেভ করা (PATCH)
+// // //     // ==========================================
+// // //     if (adminUser && adminUser.role === 'sub-admin') {
+// // //       const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
+// // //       const actionType = status === 'approved' ? 'APPROVE_WITHDRAW' : (status === 'rejected' ? 'REJECT_WITHDRAW' : 'UPDATE_WITHDRAW');
+      
+// // //       await AuditLog.create({
+// // //         adminId: adminUser._id,
+// // //         adminPhone: adminUser.phone || adminUser.uid,
+// // //         action: actionType,
+// // //         targetUser: updatedWithdraw.uid || updatedWithdraw.userId,
+// // //         details: `সাব-অ্যাডমিন (${adminUser.phone}) কর্তৃক ${updatedWithdraw.amount} টাকার উইথড্র ${status === 'approved' ? 'এপ্রুভ' : (status === 'rejected' ? 'বাতিল ও রিফান্ড' : status)} করা হয়েছে।`,
+// // //         ipAddress: ip
+// // //       });
+// // //     }
+
 // // //     return NextResponse.json({
 // // //       success: true,
 // // //       message: status === 'rejected'
 // // //         ? `✅ উইথড্র বাতিল হয়েছে এবং ৳${refundInfo?.refundAmount || 0} ফেরত দেওয়া হয়েছে`
 // // //         : '✅ উইথড্র কনফার্ম হয়েছে',
 // // //       withdraw: updatedWithdraw,
-// // //       refundInfo     // ← ✅ এইটা response-এ যাচ্ছে
+// // //       refundInfo     // ← ✅ এইটা response-exhaust এ যাচ্ছে
 // // //     }, { status: 200 });
 
 // // //   } catch (error) {
@@ -131,6 +351,8 @@
 // // //       return NextResponse.json({ success: false, message: auth.message }, { status: auth.status });
 // // //     }
 
+// // //     const adminUser = auth.user; // ✅ সাব-অ্যাডমিন বা অ্যাডমিন ইউজার অবজেক্ট
+
 // // //     const { withdrawId, action } = await request.json();
 // // //     if (!withdrawId || !action) {
 // // //       return NextResponse.json({ success: false, message: 'প্রয়োজনীয় তথ্য নেই' }, { status: 400 });
@@ -144,6 +366,22 @@
 // // //     if (action === 'approve') {
 // // //       withdraw.status = 'approved';
 // // //       await withdraw.save();
+
+// // //       // ==========================================
+// // //       // ✅ সাব-অ্যাডমিন অ্যাকশনের অডিট লগ সেভ করা (POST Approve)
+// // //       // ==========================================
+// // //       if (adminUser && adminUser.role === 'sub-admin') {
+// // //         const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
+// // //         await AuditLog.create({
+// // //           adminId: adminUser._id,
+// // //           adminPhone: adminUser.phone || adminUser.uid,
+// // //           action: 'APPROVE_WITHDRAW',
+// // //           targetUser: withdraw.uid || withdraw.userId,
+// // //           details: `সাব-অ্যাডমিন (${adminUser.phone}) কর্তৃক ${withdraw.amount} টাকার উইথড্র এপ্রুভ করা হয়েছে।`,
+// // //           ipAddress: ip
+// // //         });
+// // //       }
+
 // // //       return NextResponse.json({ success: true, message: '✅ অ্যাপ্রুভ' }, { status: 200 });
 // // //     }
 
@@ -171,6 +409,21 @@
 // // //         }
 // // //       }
 
+// // //       // ==========================================
+// // //       // ✅ সাব-অ্যাডমিন অ্যাকশনের অডিট লগ সেভ করা (POST Reject)
+// // //       // ==========================================
+// // //       if (adminUser && adminUser.role === 'sub-admin') {
+// // //         const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
+// // //         await AuditLog.create({
+// // //           adminId: adminUser._id,
+// // //           adminPhone: adminUser.phone || adminUser.uid,
+// // //           action: 'REJECT_WITHDRAW',
+// // //           targetUser: withdraw.uid || withdraw.userId,
+// // //           details: `সাব-অ্যাডমিন (${adminUser.phone}) কর্তৃক ${withdraw.amount} টাকার উইথড্র বাতিল ও ৳${refundAmount} রিফান্ড করা হয়েছে।`,
+// // //           ipAddress: ip
+// // //         });
+// // //       }
+
 // // //       return NextResponse.json({
 // // //         success: true,
 // // //         message: `✅ ৳${refundAmount} রিফান্ড`,
@@ -183,7 +436,9 @@
 // // //     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
 // // //   }
 // // // }
-// // // ////////////////////////////////////////////////////////////////
+
+// // // ////////////////////////////////////////////
+
 // // import { NextResponse } from 'next/server';
 // // import clientPromise from '@/lib/mongodb';
 // // import Withdraw from '@/models/Withdraw';
@@ -228,7 +483,7 @@
 // //       return NextResponse.json({ success: false, message: auth.message }, { status: auth.status });
 // //     }
 
-// //     const adminUser = auth.user; // ✅ সাব-অ্যাডমিন বা অ্যাডমিন ইউজার অবজেক্ট
+// //     const adminUser = auth.user; // ✅ অ্যাডমিন বা সাব-অ্যাডমিন ইউজার অবজেক্ট
 
 // //     let body;
 // //     try { body = await request.json(); } catch (e) {
@@ -244,19 +499,22 @@
 
 // //     // নোট only
 // //     if (!status) {
+// //       const existingWithdraw = await Withdraw.findById(withdrawId);
 // //       const updated = await Withdraw.findByIdAndUpdate(
 // //         withdrawId, { $set: { adminNote: cleanNote } }, { new: true }
 // //       );
 
-// //       // ✅ নোট আপডেটের অডিট লগ (যদি সাব-অ্যাডমিন হয়)
-// //       if (adminUser && adminUser.role === 'sub-admin' && updated) {
+// //       // ✅ নোট আপডেটের অডিট লগ (oldData ও newData সহ)
+// //       if (adminUser && updated) {
 // //         const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
 // //         await AuditLog.create({
 // //           adminId: adminUser._id,
 // //           adminPhone: adminUser.phone || adminUser.uid,
 // //           action: 'UPDATE_WITHDRAW_NOTE',
 // //           targetUser: updated.uid || updated.userId,
-// //           details: `সাব-অ্যাডমিন (${adminUser.phone}) উইথড্রতে নোট আপডেট করেছেন।`,
+// //           oldData: { adminNote: existingWithdraw?.adminNote || '' },
+// //           newData: { adminNote: cleanNote },
+// //           details: `অ্যাডমিন (${adminUser.phone || adminUser.uid}) উইথড্রতে নোট আপডেট করেছেন।`,
 // //           ipAddress: ip
 // //         });
 // //       }
@@ -264,7 +522,12 @@
 // //       return NextResponse.json({ success: true, message: '✅ নোট আপডেট হয়েছে!', withdraw: updated }, { status: 200 });
 // //     }
 
-// //     // status সহ
+// //     // status সহ আপডেট করার আগে আগের উইথড্র ডেটা ধরে রাখা
+// //     const existingWithdraw = await Withdraw.findById(withdrawId);
+// //     if (!existingWithdraw) {
+// //       return NextResponse.json({ success: false, message: 'Withdraw not found' }, { status: 404 });
+// //     }
+
 // //     const updateData = { status };
 // //     if (cleanNote) updateData.adminNote = cleanNote;
 
@@ -275,7 +538,7 @@
 // //     );
 
 // //     if (!updatedWithdraw) {
-// //       return NextResponse.json({ success: false, message: 'ইতিমধ্যে প্রসেস হয়েছে' }, { status: 409 });
+// //       return NextResponse.json({ success: false, message: `ইতিমধ্যে ${existingWithdraw.status} অবস্থায় আছে` }, { status: 409 });
 // //     }
 
 // //     // ✅ Reject + Refund
@@ -312,9 +575,9 @@
 // //     }
 
 // //     // ==========================================
-// //     // ✅ সাব-অ্যাডমিন অ্যাকশনের অডিট লগ সেভ করা (PATCH)
+// //     // ✅ অডিট লগ সেভ করা (PATCH - oldData ও newData সহ)
 // //     // ==========================================
-// //     if (adminUser && adminUser.role === 'sub-admin') {
+// //     if (adminUser) {
 // //       const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
 // //       const actionType = status === 'approved' ? 'APPROVE_WITHDRAW' : (status === 'rejected' ? 'REJECT_WITHDRAW' : 'UPDATE_WITHDRAW');
       
@@ -323,7 +586,17 @@
 // //         adminPhone: adminUser.phone || adminUser.uid,
 // //         action: actionType,
 // //         targetUser: updatedWithdraw.uid || updatedWithdraw.userId,
-// //         details: `সাব-অ্যাডমিন (${adminUser.phone}) কর্তৃক ${updatedWithdraw.amount} টাকার উইথড্র ${status === 'approved' ? 'এপ্রুভ' : (status === 'rejected' ? 'বাতিল ও রিফান্ড' : status)} করা হয়েছে।`,
+// //         oldData: {
+// //           withdrawId: existingWithdraw._id,
+// //           amount: existingWithdraw.amount,
+// //           status: existingWithdraw.status
+// //         },
+// //         newData: {
+// //           withdrawId: updatedWithdraw._id,
+// //           amount: updatedWithdraw.amount,
+// //           status: updatedWithdraw.status
+// //         },
+// //         details: `অ্যাডমিন (${adminUser.phone || adminUser.uid}) কর্তৃক ${updatedWithdraw.amount} টাকার উইথড্র ${status === 'approved' ? 'এপ্রুভ' : (status === 'rejected' ? 'বাতিল ও রিফান্ড' : status)} করা হয়েছে।`,
 // //         ipAddress: ip
 // //       });
 // //     }
@@ -334,7 +607,7 @@
 // //         ? `✅ উইথড্র বাতিল হয়েছে এবং ৳${refundInfo?.refundAmount || 0} ফেরত দেওয়া হয়েছে`
 // //         : '✅ উইথড্র কনফার্ম হয়েছে',
 // //       withdraw: updatedWithdraw,
-// //       refundInfo     // ← ✅ এইটা response-exhaust এ যাচ্ছে
+// //       refundInfo     // ← ✅ এইটা response-এ যাচ্ছে
 // //     }, { status: 200 });
 
 // //   } catch (error) {
@@ -351,7 +624,7 @@
 // //       return NextResponse.json({ success: false, message: auth.message }, { status: auth.status });
 // //     }
 
-// //     const adminUser = auth.user; // ✅ সাব-অ্যাডমিন বা অ্যাডমিন ইউজার অবজেক্ট
+// //     const adminUser = auth.user; // ✅ অ্যাডমিন বা সাব-অ্যাডমিন ইউজার অবজেক্ট
 
 // //     const { withdrawId, action } = await request.json();
 // //     if (!withdrawId || !action) {
@@ -363,21 +636,33 @@
 // //       return NextResponse.json({ success: false, message: 'পাওয়া যায়নি বা প্রসেস হয়েছে' }, { status: 400 });
 // //     }
 
+// //     const oldStatus = withdraw.status;
+
 // //     if (action === 'approve') {
 // //       withdraw.status = 'approved';
 // //       await withdraw.save();
 
 // //       // ==========================================
-// //       // ✅ সাব-অ্যাডমিন অ্যাকশনের অডিট লগ সেভ করা (POST Approve)
+// //       // ✅ অডিট লগ সেভ করা (POST Approve - oldData ও newData সহ)
 // //       // ==========================================
-// //       if (adminUser && adminUser.role === 'sub-admin') {
+// //       if (adminUser) {
 // //         const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
 // //         await AuditLog.create({
 // //           adminId: adminUser._id,
 // //           adminPhone: adminUser.phone || adminUser.uid,
 // //           action: 'APPROVE_WITHDRAW',
 // //           targetUser: withdraw.uid || withdraw.userId,
-// //           details: `সাব-অ্যাডমিন (${adminUser.phone}) কর্তৃক ${withdraw.amount} টাকার উইথড্র এপ্রুভ করা হয়েছে।`,
+// //           oldData: {
+// //             withdrawId: withdraw._id,
+// //             amount: withdraw.amount,
+// //             status: oldStatus
+// //           },
+// //           newData: {
+// //             withdrawId: withdraw._id,
+// //             amount: withdraw.amount,
+// //             status: withdraw.status
+// //           },
+// //           details: `অ্যাডমিন (${adminUser.phone || adminUser.uid}) কর্তৃক ${withdraw.amount} টাকার উইথড্র এপ্রুভ করা হয়েছে।`,
 // //           ipAddress: ip
 // //         });
 // //       }
@@ -410,16 +695,26 @@
 // //       }
 
 // //       // ==========================================
-// //       // ✅ সাব-অ্যাডমিন অ্যাকশনের অডিট লগ সেভ করা (POST Reject)
+// //       // ✅ অডিট লগ সেভ করা (POST Reject - oldData ও newData সহ)
 // //       // ==========================================
-// //       if (adminUser && adminUser.role === 'sub-admin') {
+// //       if (adminUser) {
 // //         const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
 // //         await AuditLog.create({
 // //           adminId: adminUser._id,
 // //           adminPhone: adminUser.phone || adminUser.uid,
 // //           action: 'REJECT_WITHDRAW',
 // //           targetUser: withdraw.uid || withdraw.userId,
-// //           details: `সাব-অ্যাডমিন (${adminUser.phone}) কর্তৃক ${withdraw.amount} টাকার উইথড্র বাতিল ও ৳${refundAmount} রিফান্ড করা হয়েছে।`,
+// //           oldData: {
+// //             withdrawId: withdraw._id,
+// //             amount: withdraw.amount,
+// //             status: oldStatus
+// //           },
+// //           newData: {
+// //             withdrawId: withdraw._id,
+// //             amount: withdraw.amount,
+// //             status: withdraw.status
+// //           },
+// //           details: `অ্যাডমিন (${adminUser.phone || adminUser.uid}) কর্তৃক ${withdraw.amount} টাকার উইথড্র বাতিল ও ৳${refundAmount} রিফান্ড করা হয়েছে।`,
 // //           ipAddress: ip
 // //         });
 // //       }
@@ -437,16 +732,15 @@
 // //   }
 // // }
 
-// // ////////////////////////////////////////////
+// // ////////////////////////////////////////////////
 
 // import { NextResponse } from 'next/server';
 // import clientPromise from '@/lib/mongodb';
 // import Withdraw from '@/models/Withdraw';
 // import User from '@/models/User';
 // import { verifyAuth } from '@/utils/authCheck';
-// import AuditLog from '@/models/AuditLog'; // ✅ অডিট লগ মডেল ইমপোর্ট করা হলো
+// import AuditLog from '@/models/AuditLog';
 
-// // ✅ সঠিক refund calculation
 // const calculateRefundAmount = (withdraw) => {
 //   if (withdraw.deductedBDT && Number(withdraw.deductedBDT) > 0) {
 //     return Number(withdraw.deductedBDT);
@@ -483,7 +777,7 @@
 //       return NextResponse.json({ success: false, message: auth.message }, { status: auth.status });
 //     }
 
-//     const adminUser = auth.user; // ✅ অ্যাডমিন বা সাব-অ্যাডমিন ইউজার অবজেক্ট
+//     const adminUser = auth.user;
 
 //     let body;
 //     try { body = await request.json(); } catch (e) {
@@ -497,14 +791,12 @@
 
 //     const cleanNote = typeof adminNote === 'string' ? adminNote.trim().slice(0, 200) : '';
 
-//     // নোট only
 //     if (!status) {
 //       const existingWithdraw = await Withdraw.findById(withdrawId);
 //       const updated = await Withdraw.findByIdAndUpdate(
 //         withdrawId, { $set: { adminNote: cleanNote } }, { new: true }
 //       );
 
-//       // ✅ নোট আপডেটের অডিট লগ (oldData ও newData সহ)
 //       if (adminUser && updated) {
 //         const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
 //         await AuditLog.create({
@@ -522,10 +814,23 @@
 //       return NextResponse.json({ success: true, message: '✅ নোট আপডেট হয়েছে!', withdraw: updated }, { status: 200 });
 //     }
 
-//     // status সহ আপডেট করার আগে আগের উইথড্র ডেটা ধরে রাখা
 //     const existingWithdraw = await Withdraw.findById(withdrawId);
 //     if (!existingWithdraw) {
 //       return NextResponse.json({ success: false, message: 'Withdraw not found' }, { status: 404 });
+//     }
+
+//     // উইথড্র প্রসেস বা রিজেক্ট হওয়ার আগে ইউজারের বর্তমান ব্যালেন্স ফেচ করা
+//     const targetUserId = existingWithdraw.uid || existingWithdraw.userId;
+//     let oldUserBalance = 0;
+//     let newUserBalance = 0;
+//     const walletType = existingWithdraw.walletType || 'main';
+//     const balanceField = walletType === 'referral' ? 'referralBalance' : 'balance';
+
+//     if (targetUserId) {
+//       const targetUserDoc = await User.findOne({ uid: targetUserId });
+//       if (targetUserDoc) {
+//         oldUserBalance = targetUserDoc[balanceField] || 0;
+//       }
 //     }
 
 //     const updateData = { status };
@@ -541,22 +846,12 @@
 //       return NextResponse.json({ success: false, message: `ইতিমধ্যে ${existingWithdraw.status} অবস্থায় আছে` }, { status: 409 });
 //     }
 
-//     // ✅ Reject + Refund
 //     let refundInfo = null;
 
 //     if (status === 'rejected') {
-//       const targetUserId = updatedWithdraw.uid || updatedWithdraw.userId;
-//       const walletType = updatedWithdraw.walletType || 'main';
 //       const refundAmount = calculateRefundAmount(updatedWithdraw);
 
-//       console.log('💸 Refund:');
-//       console.log('  amount:', updatedWithdraw.amount);
-//       console.log('  deductedBDT:', updatedWithdraw.deductedBDT);
-//       console.log('  exchangeRate:', updatedWithdraw.exchangeRate);
-//       console.log('  → refundAmount:', refundAmount);
-
 //       if (targetUserId && refundAmount > 0) {
-//         const balanceField = walletType === 'referral' ? 'referralBalance' : 'balance';
 //         const updatedUser = await User.findOneAndUpdate(
 //           { uid: targetUserId },
 //           { $inc: { [balanceField]: refundAmount } },
@@ -564,19 +859,18 @@
 //         );
 
 //         if (updatedUser) {
+//           newUserBalance = updatedUser[balanceField] || 0;
 //           refundInfo = {
 //             refundAmount,
 //             newBalance: updatedUser.balance,
 //             newReferralBalance: updatedUser.referralBalance
 //           };
-//           console.log('  ✅ Refund সফল:', refundInfo);
 //         }
 //       }
+//     } else {
+//       newUserBalance = oldUserBalance; // এপ্রুভ হলে উইথড্রর টাকা আগেই কেটে নেওয়া হয়েছিল, তাই ব্যালেন্স অপরিবর্তিত থাকে
 //     }
 
-//     // ==========================================
-//     // ✅ অডিট লগ সেভ করা (PATCH - oldData ও newData সহ)
-//     // ==========================================
 //     if (adminUser) {
 //       const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
 //       const actionType = status === 'approved' ? 'APPROVE_WITHDRAW' : (status === 'rejected' ? 'REJECT_WITHDRAW' : 'UPDATE_WITHDRAW');
@@ -585,18 +879,20 @@
 //         adminId: adminUser._id,
 //         adminPhone: adminUser.phone || adminUser.uid,
 //         action: actionType,
-//         targetUser: updatedWithdraw.uid || updatedWithdraw.userId,
+//         targetUser: targetUserId,
 //         oldData: {
 //           withdrawId: existingWithdraw._id,
 //           amount: existingWithdraw.amount,
-//           status: existingWithdraw.status
+//           status: existingWithdraw.status,
+//           [balanceField]: oldUserBalance
 //         },
 //         newData: {
 //           withdrawId: updatedWithdraw._id,
 //           amount: updatedWithdraw.amount,
-//           status: updatedWithdraw.status
+//           status: updatedWithdraw.status,
+//           [balanceField]: newUserBalance
 //         },
-//         details: `অ্যাডমিন (${adminUser.phone || adminUser.uid}) কর্তৃক ${updatedWithdraw.amount} টাকার উইথড্র ${status === 'approved' ? 'এপ্রুভ' : (status === 'rejected' ? 'বাতিল ও রিফান্ড' : status)} করা হয়েছে।`,
+//         details: `অ্যাডমিন (${adminUser.phone || adminUser.uid}) কর্তৃক ${updatedWithdraw.amount} টাকার উইথড্র ${status === 'approved' ? 'এপ্রুভ করা হয়েছে।' : `বাতিল ও ৳${refundInfo?.refundAmount || 0} রিফান্ড করা হয়েছে। ইউজারের ব্যালেন্স ৳${oldUserBalance} থেকে বেড়ে ৳${newUserBalance} হয়েছে।`}`,
 //         ipAddress: ip
 //       });
 //     }
@@ -607,7 +903,7 @@
 //         ? `✅ উইথড্র বাতিল হয়েছে এবং ৳${refundInfo?.refundAmount || 0} ফেরত দেওয়া হয়েছে`
 //         : '✅ উইথড্র কনফার্ম হয়েছে',
 //       withdraw: updatedWithdraw,
-//       refundInfo     // ← ✅ এইটা response-এ যাচ্ছে
+//       refundInfo
 //     }, { status: 200 });
 
 //   } catch (error) {
@@ -624,7 +920,7 @@
 //       return NextResponse.json({ success: false, message: auth.message }, { status: auth.status });
 //     }
 
-//     const adminUser = auth.user; // ✅ অ্যাডমিন বা সাব-অ্যাডমিন ইউজার অবজেক্ট
+//     const adminUser = auth.user;
 
 //     const { withdrawId, action } = await request.json();
 //     if (!withdrawId || !action) {
@@ -637,30 +933,43 @@
 //     }
 
 //     const oldStatus = withdraw.status;
+//     const targetUserId = withdraw.uid || withdraw.userId;
+//     const walletType = withdraw.walletType || 'main';
+//     const balanceField = walletType === 'referral' ? 'referralBalance' : 'balance';
+
+//     let oldUserBalance = 0;
+//     let newUserBalance = 0;
+
+//     if (targetUserId) {
+//       const userDoc = await User.findOne({ uid: targetUserId });
+//       if (userDoc) {
+//         oldUserBalance = userDoc[balanceField] || 0;
+//       }
+//     }
 
 //     if (action === 'approve') {
 //       withdraw.status = 'approved';
 //       await withdraw.save();
+//       newUserBalance = oldUserBalance;
 
-//       // ==========================================
-//       // ✅ অডিট লগ সেভ করা (POST Approve - oldData ও newData সহ)
-//       // ==========================================
 //       if (adminUser) {
 //         const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
 //         await AuditLog.create({
 //           adminId: adminUser._id,
 //           adminPhone: adminUser.phone || adminUser.uid,
 //           action: 'APPROVE_WITHDRAW',
-//           targetUser: withdraw.uid || withdraw.userId,
+//           targetUser: targetUserId,
 //           oldData: {
 //             withdrawId: withdraw._id,
 //             amount: withdraw.amount,
-//             status: oldStatus
+//             status: oldStatus,
+//             [balanceField]: oldUserBalance
 //           },
 //           newData: {
 //             withdrawId: withdraw._id,
 //             amount: withdraw.amount,
-//             status: withdraw.status
+//             status: withdraw.status,
+//             [balanceField]: newUserBalance
 //           },
 //           details: `অ্যাডমিন (${adminUser.phone || adminUser.uid}) কর্তৃক ${withdraw.amount} টাকার উইথড্র এপ্রুভ করা হয়েছে।`,
 //           ipAddress: ip
@@ -674,18 +983,17 @@
 //       withdraw.status = 'rejected';
 //       await withdraw.save();
 
-//       const walletType = withdraw.walletType || 'main';
 //       const refundAmount = calculateRefundAmount(withdraw);
-
 //       let refundInfo = null;
-//       if (refundAmount > 0) {
-//         const balanceField = walletType === 'referral' ? 'referralBalance' : 'balance';
+
+//       if (refundAmount > 0 && targetUserId) {
 //         const updatedUser = await User.findOneAndUpdate(
-//           { uid: withdraw.uid },
+//           { uid: targetUserId },
 //           { $inc: { [balanceField]: refundAmount } },
 //           { new: true }
 //         );
 //         if (updatedUser) {
+//           newUserBalance = updatedUser[balanceField] || 0;
 //           refundInfo = {
 //             refundAmount,
 //             newBalance: updatedUser.balance,
@@ -694,27 +1002,26 @@
 //         }
 //       }
 
-//       // ==========================================
-//       // ✅ অডিট লগ সেভ করা (POST Reject - oldData ও newData সহ)
-//       // ==========================================
 //       if (adminUser) {
 //         const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
 //         await AuditLog.create({
 //           adminId: adminUser._id,
 //           adminPhone: adminUser.phone || adminUser.uid,
 //           action: 'REJECT_WITHDRAW',
-//           targetUser: withdraw.uid || withdraw.userId,
+//           targetUser: targetUserId,
 //           oldData: {
 //             withdrawId: withdraw._id,
 //             amount: withdraw.amount,
-//             status: oldStatus
+//             status: oldStatus,
+//             [balanceField]: oldUserBalance
 //           },
 //           newData: {
 //             withdrawId: withdraw._id,
 //             amount: withdraw.amount,
-//             status: withdraw.status
+//             status: withdraw.status,
+//             [balanceField]: newUserBalance
 //           },
-//           details: `অ্যাডমিন (${adminUser.phone || adminUser.uid}) কর্তৃক ${withdraw.amount} টাকার উইথড্র বাতিল ও ৳${refundAmount} রিফান্ড করা হয়েছে।`,
+//           details: `অ্যাডমিন (${adminUser.phone || adminUser.uid}) কর্তৃক ${withdraw.amount} টাকার উইথড্র বাতিল ও ৳${refundAmount} রিফান্ড করা হয়েছে। ইউজারের ব্যালেন্স ৳${oldUserBalance} থেকে বেড়ে ৳${newUserBalance} হয়েছে।`,
 //           ipAddress: ip
 //         });
 //       }
@@ -732,7 +1039,7 @@
 //   }
 // }
 
-// ////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////
 
 import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
@@ -751,12 +1058,28 @@ const calculateRefundAmount = (withdraw) => {
   return Number(withdraw.amount) || 0;
 };
 
+// ✅ সাব-অ্যাডমিন বা অ্যাডমিন ভেরিফিকেশনের জন্য হেলপার ফাংশন
+const checkAdminAuth = async () => {
+  try {
+    const auth = await verifyAuth('admin');
+    if (auth.success && auth.user) {
+      const role = auth.user.role;
+      if (role === 'admin' || role === 'sub-admin') {
+        return { success: true, user: auth.user };
+      }
+    }
+  } catch (e) {
+    // ignore
+  }
+  return { success: false, message: 'অনুমোদিত নয়! দয়া করে আবার লগইন করুন।' };
+};
+
 export async function GET(request) {
   try {
     await clientPromise;
-    const auth = await verifyAuth('admin');
-    if (!auth.success) {
-      return NextResponse.json({ success: false, message: auth.message }, { status: auth.status });
+    const authCheck = await checkAdminAuth();
+    if (!authCheck.success) {
+      return NextResponse.json({ success: false, message: authCheck.message }, { status: 401 });
     }
 
     let withdraws = await Withdraw.find({}).lean();
@@ -772,12 +1095,12 @@ export async function PATCH(request) {
   try {
     await clientPromise;
 
-    const auth = await verifyAuth('admin');
-    if (!auth.success) {
-      return NextResponse.json({ success: false, message: auth.message }, { status: auth.status });
+    const authCheck = await checkAdminAuth();
+    if (!authCheck.success) {
+      return NextResponse.json({ success: false, message: authCheck.message }, { status: 401 });
     }
 
-    const adminUser = auth.user;
+    const adminUser = authCheck.user;
 
     let body;
     try { body = await request.json(); } catch (e) {
@@ -806,7 +1129,7 @@ export async function PATCH(request) {
           targetUser: updated.uid || updated.userId,
           oldData: { adminNote: existingWithdraw?.adminNote || '' },
           newData: { adminNote: cleanNote },
-          details: `অ্যাডমিন (${adminUser.phone || adminUser.uid}) উইথড্রতে নোট আপডেট করেছেন।`,
+          details: `${adminUser.role === 'sub-admin' ? 'সাব-অ্যাডমিন' : 'অ্যাডমিন'} (${adminUser.phone || adminUser.uid}) উইথড্রতে নোট আপডেট করেছেন।`,
           ipAddress: ip
         });
       }
@@ -819,7 +1142,6 @@ export async function PATCH(request) {
       return NextResponse.json({ success: false, message: 'Withdraw not found' }, { status: 404 });
     }
 
-    // উইথড্র প্রসেস বা রিজেক্ট হওয়ার আগে ইউজারের বর্তমান ব্যালেন্স ফেচ করা
     const targetUserId = existingWithdraw.uid || existingWithdraw.userId;
     let oldUserBalance = 0;
     let newUserBalance = 0;
@@ -868,12 +1190,13 @@ export async function PATCH(request) {
         }
       }
     } else {
-      newUserBalance = oldUserBalance; // এপ্রুভ হলে উইথড্রর টাকা আগেই কেটে নেওয়া হয়েছিল, তাই ব্যালেন্স অপরিবর্তিত থাকে
+      newUserBalance = oldUserBalance;
     }
 
     if (adminUser) {
       const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
       const actionType = status === 'approved' ? 'APPROVE_WITHDRAW' : (status === 'rejected' ? 'REJECT_WITHDRAW' : 'UPDATE_WITHDRAW');
+      const roleText = adminUser.role === 'sub-admin' ? 'সাব-অ্যাডমিন' : 'অ্যাডমিন';
       
       await AuditLog.create({
         adminId: adminUser._id,
@@ -892,7 +1215,7 @@ export async function PATCH(request) {
           status: updatedWithdraw.status,
           [balanceField]: newUserBalance
         },
-        details: `অ্যাডমিন (${adminUser.phone || adminUser.uid}) কর্তৃক ${updatedWithdraw.amount} টাকার উইথড্র ${status === 'approved' ? 'এপ্রুভ করা হয়েছে।' : `বাতিল ও ৳${refundInfo?.refundAmount || 0} রিফান্ড করা হয়েছে। ইউজারের ব্যালেন্স ৳${oldUserBalance} থেকে বেড়ে ৳${newUserBalance} হয়েছে।`}`,
+        details: `${roleText} (${adminUser.phone || adminUser.uid}) কর্তৃক ${updatedWithdraw.amount} টাকার উইথড্র ${status === 'approved' ? 'এপ্রুভ করা হয়েছে।' : `বাতিল ও ৳${refundInfo?.refundAmount || 0} রিফান্ড করা হয়েছে। ইউজারের ব্যালেন্স ৳${oldUserBalance} থেকে বেড়ে ৳${newUserBalance} হয়েছে।`}`,
         ipAddress: ip
       });
     }
@@ -915,12 +1238,12 @@ export async function PATCH(request) {
 export async function POST(request) {
   try {
     await clientPromise;
-    const auth = await verifyAuth('admin');
-    if (!auth.success) {
-      return NextResponse.json({ success: false, message: auth.message }, { status: auth.status });
+    const authCheck = await checkAdminAuth();
+    if (!authCheck.success) {
+      return NextResponse.json({ success: false, message: authCheck.message }, { status: 401 });
     }
 
-    const adminUser = auth.user;
+    const adminUser = authCheck.user;
 
     const { withdrawId, action } = await request.json();
     if (!withdrawId || !action) {
@@ -947,6 +1270,8 @@ export async function POST(request) {
       }
     }
 
+    const roleText = adminUser.role === 'sub-admin' ? 'সাব-অ্যাডমিন' : 'অ্যাডমিন';
+
     if (action === 'approve') {
       withdraw.status = 'approved';
       await withdraw.save();
@@ -971,7 +1296,7 @@ export async function POST(request) {
             status: withdraw.status,
             [balanceField]: newUserBalance
           },
-          details: `অ্যাডমিন (${adminUser.phone || adminUser.uid}) কর্তৃক ${withdraw.amount} টাকার উইথড্র এপ্রুভ করা হয়েছে।`,
+          details: `${roleText} (${adminUser.phone || adminUser.uid}) কর্তৃক ${withdraw.amount} টাকার উইথড্র এপ্রুভ করা হয়েছে।`,
           ipAddress: ip
         });
       }
@@ -1021,7 +1346,7 @@ export async function POST(request) {
             status: withdraw.status,
             [balanceField]: newUserBalance
           },
-          details: `অ্যাডমিন (${adminUser.phone || adminUser.uid}) কর্তৃক ${withdraw.amount} টাকার উইথড্র বাতিল ও ৳${refundAmount} রিফান্ড করা হয়েছে। ইউজারের ব্যালেন্স ৳${oldUserBalance} থেকে বেড়ে ৳${newUserBalance} হয়েছে।`,
+          details: `${roleText} (${adminUser.phone || adminUser.uid}) কর্তৃক ${withdraw.amount} টাকার উইথড্র বাতিল ও ৳${refundAmount} রিফান্ড করা হয়েছে। ইউজারের ব্যালেন্স ৳${oldUserBalance} থেকে বেড়ে ৳${newUserBalance} হয়েছে।`,
           ipAddress: ip
         });
       }
